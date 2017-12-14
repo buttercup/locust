@@ -1,0 +1,14 @@
+{
+  "name": "@buttercup/locust",
+  "version": "0.0.0",
+  "description": "Locust Login Toolkit",
+  "main": "source/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "keysim": "^2.0.0"
+  }
+}
