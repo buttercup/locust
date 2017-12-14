@@ -2,7 +2,7 @@
 
 > Login form location utility
 
-[![Build Status](https://travis-ci.org/buttercup/locust.svg?branch=master)](https://travis-ci.org/buttercup/locust)
+[![Build Status](https://travis-ci.org/buttercup/locust.svg?branch=master)](https://travis-ci.org/buttercup/locust) [![npm version](https://badge.fury.io/js/%40buttercup%2Flocust.svg)](https://www.npmjs.com/package/@buttercup/locust)
 
 ## About
 
