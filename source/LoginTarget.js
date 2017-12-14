@@ -1,3 +1,4 @@
+import isVisible from "is-visible";
 import { dedupe } from "./arrays.js";
 
 export default class LoginTarget {
@@ -44,5 +45,22 @@ export default class LoginTarget {
         this._usernameFields.push(...fields);
         this._usernameFields = dedupe(this._usernameFields);
         return this;
+    }
+
+    calculateScore() {
+        let score = 0;
+        if (this.usernameFields.length > 0) {
+            score += this.usernameFields.length > 1 ? 5 : 10;
+        }
+        if (this.passwordFields.length > 0) {
+            score += this.passwordFields.length > 1 ? 5 : 10;
+        }
+        if (this.submitButtons.length > 0) {
+            score += this.submitButtons.length > 1 ? 5 : 10;
+        }
+        if (isVisible(this.form)) {
+            score += 10;
+        }
+        return score;
     }
 }

@@ -25,6 +25,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "husky": "^0.14.3",
+    "is-visible": "^2.1.2",
     "keysim": "^2.0.0",
     "lint-staged": "^6.0.0",
     "npm-run-all": "^4.1.2",
