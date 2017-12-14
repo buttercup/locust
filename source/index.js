@@ -1,19 +1,5 @@
-// function getTargets() {
-
-// }
-
-// function setLoginDetails() {
-
-//     return {
-//         watch
-//     };
-// }
-
-// function watch() {
-
-// }
+import { getLoginTargets } from "./loginTargets.js";
 
 module.exports = {
-    // getTargets,
-    // setLoginDetails
+    getLoginTargets
 };
