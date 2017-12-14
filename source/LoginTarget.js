@@ -1,5 +1,6 @@
 import isVisible from "is-visible";
 import { dedupe } from "./arrays.js";
+import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
 
@@ -106,6 +107,26 @@ export default class LoginTarget {
     }
 
     _waitForNoUnload() {
-        return Promise.resolve();
+        const unloadObserver = getUnloadObserver();
+        return Promise.race([
+            new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(false);
+                }, this.forceSubmitDelay);
+            }),
+            new Promise(resolve => {
+                if (unloadObserver.willUnload) {
+                    return resolve(true);
+                }
+                unloadObserver.once("unloading", () => {
+                    resolve(true);
+                });
+            })
+        ]).then(hasUnloaded => {
+            if (!hasUnloaded) {
+                // No unload events detected, so we need for force submit
+                this.form.submit();
+            }
+        });
     }
 }

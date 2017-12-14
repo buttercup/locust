@@ -29,6 +29,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "eventemitter3": "^3.0.0",
     "husky": "^0.14.3",
     "is-visible": "^2.1.2",
     "lint-staged": "^6.0.0",
