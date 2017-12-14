@@ -45,3 +45,5 @@ getLoginTarget().enterDetails("myUsername", "myPassword");
 ```
 
 _**Note** that `getLoginTarget` may return `null` if no form is found, so you should check for this eventuality._
+
+You can also read the [API documentation](https://github.com/buttercup/locust/blob/master/API.md) if you're into that kind of thing.

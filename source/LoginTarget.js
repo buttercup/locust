@@ -4,6 +4,11 @@ import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
 
+/**
+ * The LoginTarget class which represents a 'target' for logging in
+ * with some credentials
+ * @class LoginTarget
+ */
 export default class LoginTarget {
     constructor() {
         this._form = null;
@@ -13,22 +18,50 @@ export default class LoginTarget {
         this._forceSubmitDelay = FORCE_SUBMIT_DELAY;
     }
 
+    /**
+     * Delay in milliseconds that the library should wait before force submitting the form
+     * @type {Number}
+     * @memberof LoginTarget
+     */
     get forceSubmitDelay() {
         return this._forceSubmitDelay;
     }
 
+    /**
+     * The target login form
+     * @type {HTMLFormElement}
+     * @memberof LoginTarget
+     */
     get form() {
         return this._form;
     }
 
+    /**
+     * Array of password fields within the associated form
+     * @type {Array.<HTMLInputElement>}
+     * @readonly
+     * @memberof LoginTarget
+     */
     get passwordFields() {
         return this._passwordFields;
     }
 
+    /**
+     * Array of submit buttons within the associated form
+     * @type {Array.<HTMLInputElement|HTMLButtonElement>}
+     * @readonly
+     * @memberof LoginTarget
+     */
     get submitButtons() {
         return this._submitButtons;
     }
 
+    /**
+     * Array of username fields within the associated form
+     * @type {Array.<HTMLInputElement>}
+     * @readonly
+     * @memberof LoginTarget
+     */
     get usernameFields() {
         return this._usernameFields;
     }
@@ -41,24 +74,49 @@ export default class LoginTarget {
         this._form = newForm;
     }
 
+    /**
+     * Add password fields to the target
+     * @param {...HTMLInputElement} fields The password fields
+     * @returns {LoginTarget} Self
+     * @memberof LoginTarget
+     */
     addPasswordFields(...fields) {
         this._passwordFields.push(...fields);
         this._passwordFields = dedupe(this._passwordFields);
         return this;
     }
 
+    /**
+     * Add submit buttons to the target
+     * @param {...HTMLInputElement} buttons The submit buttons
+     * @returns {LoginTarget} Self
+     * @memberof LoginTarget
+     */
     addSubmitButtons(...buttons) {
         this._submitButtons.push(...buttons);
         this._submitButtons = dedupe(this._submitButtons);
         return this;
     }
 
+    /**
+     * Add username fields to the target
+     * @param {...HTMLInputElement} fields The username fields
+     * @returns {LoginTarget} Self
+     * @memberof LoginTarget
+     */
     addUsernameFields(...fields) {
         this._usernameFields.push(...fields);
         this._usernameFields = dedupe(this._usernameFields);
         return this;
     }
 
+    /**
+     * Calculate the score of the login target
+     * This can be used to compare LoginTargets by their likelihood of being
+     * the correct login form. Higher number is better.
+     * @returns {Number} The calculated score
+     * @memberof LoginTarget
+     */
     calculateScore() {
         let score = 0;
         if (this.usernameFields.length > 0) {
@@ -76,6 +134,15 @@ export default class LoginTarget {
         return score;
     }
 
+    /**
+     * Enter credentials into the form without logging in
+     * @param {String} username The username to enter
+     * @param {String} password The password to enter
+     * @returns {Promise} A promise that resolves once the data has been entered
+     * @memberof LoginTarget
+     * @example
+     *      loginTarget.enterDetails("myUsername", "myPassword");
+     */
     enterDetails(username, password) {
         this.usernameFields.forEach(field => {
             field.value = username;
@@ -90,10 +157,37 @@ export default class LoginTarget {
         return Promise.resolve();
     }
 
+    /**
+     * Login using the form
+     * Enters the credentials into the form and logs in by either pressing the
+     * login button or by submitting the form. The `force` option allows for
+     * trying both methods: first by clicking the button and second by calling
+     * `form.submit()`. When using `force=true`, if clicking the button doesn't
+     * unload the page in `target.forceSubmitDelay` milliseconds,
+     * `form.submit()` is called. If no form submit button is present, `force`
+     * does nothing as `form.submit()` is called immediately.
+     * @param {String} username The username to login with
+     * @param {String} password The password to login with
+     * @param {Boolean=} force Whether or not to force the login (defaults to
+     *  false)
+     * @returns {Promise} A promise that resolves once the login procedure has
+     * completed. Let's be honest: there's probably no point to listen to the
+     * return value of this function.
+     * @memberof LoginTarget
+     * @example
+     *      loginTarget.login("myUsername", "myPassword");
+     */
     login(username, password, force = false) {
         return this.enterDetails(username, password).then(() => this.submit(force));
     }
 
+    /**
+     * Submit the associated form
+     * You probably don't want this function. `login` or `enterDetails` are way
+     * better.
+     * @param {Boolean=} force Force the submission (defaults to false)
+     * @memberof LoginTarget
+     */
     submit(force = false) {
         const [submitButton] = this.submitButtons;
         if (!submitButton) {
@@ -106,6 +200,14 @@ export default class LoginTarget {
         return force ? this._waitForNoUnload() : Promise.resolve();
     }
 
+    /**
+     * Wait for either the unload event to fire or the delay to
+     * time out
+     * @protected
+     * @returns {Promise} A promise that resolves once either the delay has
+     * expired for the page has begun unloading.
+     * @memberof LoginTarget
+     */
     _waitForNoUnload() {
         const unloadObserver = getUnloadObserver();
         return Promise.race([

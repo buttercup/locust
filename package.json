@@ -9,6 +9,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "webpack -w --progress",
+    "docs": "jsdoc2md source/**/*.js > API.md",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
     "prepublishOnly": "run-s build",
@@ -36,6 +37,7 @@
     "eventemitter3": "^3.0.0",
     "husky": "^0.14.3",
     "is-visible": "^2.1.2",
+    "jsdoc-to-markdown": "^3.0.2",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
