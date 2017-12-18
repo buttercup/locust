@@ -5,12 +5,14 @@ function fetchForms(queryEl = document) {
 }
 
 export function fetchFormsWithInputs(queryEl = document) {
-    return fetchForms(queryEl).map(formEl => ({
-        form: formEl,
-        usernameFields: fetchUsernameInputs(formEl),
-        passwordFields: fetchPasswordInputs(formEl),
-        submitButtons: fetchSubmitButtons(formEl)
-    }));
+    return fetchForms(queryEl)
+        .map(formEl => ({
+            form: formEl,
+            usernameFields: fetchUsernameInputs(formEl),
+            passwordFields: fetchPasswordInputs(formEl),
+            submitButtons: fetchSubmitButtons(formEl)
+        }))
+        .filter(form => form.passwordFields.length > 0);
 }
 
 function fetchPasswordInputs(queryEl = document) {

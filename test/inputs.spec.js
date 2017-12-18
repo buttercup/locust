@@ -23,5 +23,19 @@ describe("inputs", function() {
             fetchFormsWithInputs(this.queryEl);
             expect(fakeForm.querySelectorAll.calledThrice).to.be.true;
         });
+
+        it("filters forms without password fields", function() {
+            const fakeForm = {
+                querySelectorAll: sinon.stub().callsFake(function(query) {
+                    if (/username/.test(query)) {
+                        return {};
+                    }
+                    return [];
+                })
+            };
+            this.forms.push(fakeForm);
+            const forms = fetchFormsWithInputs(this.queryEl);
+            expect(forms).to.have.lengthOf(0);
+        });
     });
 });
