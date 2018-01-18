@@ -1,5 +1,4 @@
 import isVisible from "is-visible";
-import { dedupe } from "./arrays.js";
 import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
@@ -12,9 +11,9 @@ export const FORCE_SUBMIT_DELAY = 7500;
 export default class LoginTarget {
     constructor() {
         this._form = null;
-        this._usernameFields = [];
-        this._passwordFields = [];
-        this._submitButtons = [];
+        this._usernameFields = new Set();
+        this._passwordFields = new Set();
+        this._submitButtons = new Set();
         this._forceSubmitDelay = FORCE_SUBMIT_DELAY;
     }
 
@@ -43,7 +42,7 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     get passwordFields() {
-        return this._passwordFields;
+        return [...this._passwordFields.values()];
     }
 
     /**
@@ -53,7 +52,7 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     get submitButtons() {
-        return this._submitButtons;
+        return [...this._submitButtons.values()];
     }
 
     /**
@@ -63,7 +62,7 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     get usernameFields() {
-        return this._usernameFields;
+        return [...this._usernameFields.values()];
     }
 
     set forceSubmitDelay(delay) {
@@ -81,8 +80,7 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     addPasswordFields(...fields) {
-        this._passwordFields.push(...fields);
-        this._passwordFields = dedupe(this._passwordFields);
+        for (const item of fields) this._passwordFields.add(item);
         return this;
     }
 
@@ -93,8 +91,7 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     addSubmitButtons(...buttons) {
-        this._submitButtons.push(...buttons);
-        this._submitButtons = dedupe(this._submitButtons);
+        for (const item of buttons) this._submitButtons.add(item);
         return this;
     }
 
@@ -105,8 +102,7 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     addUsernameFields(...fields) {
-        this._usernameFields.push(...fields);
-        this._usernameFields = dedupe(this._usernameFields);
+        for (const item of fields) this._usernameFields.add(item);
         return this;
     }
 
