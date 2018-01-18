@@ -21,7 +21,7 @@ _When requiring this library directly via `@buttercup/locust`, the minified vers
 Locust is a UMD library, so it can be used in a variety of places (such as in the browser, CommonJS2 and AMD systems). You can either import it:
 
 ```javascript
-const Locust = require("locust");
+const Locust = require("@buttercup/locust");
 ```
 
 Or embed it in a webpage and access it via `window.Locust`.
