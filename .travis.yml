@@ -1,10 +1,21 @@
 matrix:
   include:
     - language: node_js
-      script: npm run test:ci:general
       node_js: "stable"
+      sudo: required
       env:
         - NAME="General"
+      addons:
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+      before_script:
+        - export DISPLAY=:99.0
+        - sh -e /etc/init.d/xvfb start
+        - sleep 3 # give xvfb some time to start
+      script: npm run test:ci:general
     - language: node_js
       node_js: 8
       sudo: required
