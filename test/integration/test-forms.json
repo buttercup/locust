@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Outlook",
+        "url": "https://outlook.live.com/owa/?authRedirect=true&nlp=1",
+        "expectedFields": ["username", "password"]
+    },
+    {
+        "name": "GitHub",
+        "url": "https://github.com/login",
+        "expectedFields": ["username", "password"]
+    }
+]
