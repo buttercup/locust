@@ -12,7 +12,7 @@
     "docs": "jsdoc2md source/**/*.js > API.md",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
-    "prepublishOnly": "run-s build",
+    "prepublishOnly": "run-s build docs",
     "pub": "np",
     "test": "run-s test:web test:format",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'",
