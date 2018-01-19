@@ -30,6 +30,7 @@ export const USERNAME_QUERIES = [
     "input[type=text][title*=username i]",
     "input[type=text][placeholder*=username i]",
     "input[type=text][name*=email i]",
+    "input[type=text][name*=login i]",
     "input[type=email]",
     "input[aria-label*=username i]",
     "input[aria-label*=email i]"
