@@ -1,5 +1,12 @@
 # Locust Changelog
 
+## v0.2.0
+_2018-01-19_
+
+ * #5 - Add support for GitHub login
+ * #6 - Prevent logging in to all inputs
+ * #9 - Add integration test rig
+
 ## v0.1.1
 _2017-12-18_
 
