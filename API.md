@@ -1,11 +1,3 @@
-## Modules
-
-<dl>
-<dt><a href="#module_Locust">Locust</a></dt>
-<dd><p>The Locust library</p>
-</dd>
-</dl>
-
 ## Classes
 
 <dl>
@@ -26,11 +18,6 @@ Returned targets are not sorted or processed in any way that would indicate how 
 they are to be the &#39;correct&#39; login form for the page.</p>
 </dd>
 </dl>
-
-<a name="module_Locust"></a>
-
-## Locust
-The Locust library
 
 <a name="LoginTarget"></a>
 
