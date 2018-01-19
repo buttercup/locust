@@ -14,8 +14,11 @@
     "precommit": "lint-staged",
     "prepublishOnly": "run-s build docs",
     "pub": "np",
-    "test": "run-s test:web test:format",
+    "test": "run-s test:web test:integration test:format",
+    "test:ci:general": "run-s test:web test:format",
+    "test:ci:integration": "run-s test:integration",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'",
+    "test:integration": "npm run build && node test/integration/index.js",
     "test:web": "karma start"
   },
   "lint-staged": {
@@ -47,6 +50,7 @@
     "karma-webpack": "^2.0.8",
     "lint-staged": "^6.0.0",
     "mocha": "^4.0.1",
+    "nightmare": "^2.10.0",
     "np": "^2.18.2",
     "npm-run-all": "^4.1.2",
     "prettier": "^1.9.2",
