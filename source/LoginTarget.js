@@ -140,12 +140,12 @@ export default class LoginTarget {
      *      loginTarget.enterDetails("myUsername", "myPassword");
      */
     enterDetails(username, password) {
-        this.usernameFields.forEach(field => {
+        this.usernameFields.slice(0, 1).forEach(field => {
             field.value = username;
             const changeEvent = new Event("change");
             field.dispatchEvent(changeEvent);
         });
-        this.passwordFields.forEach(field => {
+        this.passwordFields.slice(0, 1).forEach(field => {
             field.value = password;
             const changeEvent = new Event("change");
             field.dispatchEvent(changeEvent);
