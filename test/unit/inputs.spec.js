@@ -1,4 +1,4 @@
-import { fetchFormsWithInputs } from "../source/inputs.js";
+import { fetchFormsWithInputs } from "../../source/inputs.js";
 
 describe("inputs", function() {
     describe("fetchFormsWithInputs", function() {
