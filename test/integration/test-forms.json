@@ -13,4 +13,5 @@
         "name": "DynDNS",
         "url": "https://account.dyn.com/entrance/",
         "expectedFields": ["username", "password"]
+    }
 ]
