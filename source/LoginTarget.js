@@ -3,6 +3,8 @@ import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
 
+const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+
 /**
  * The LoginTarget class which represents a 'target' for logging in
  * with some credentials
@@ -141,13 +143,17 @@ export default class LoginTarget {
      */
     enterDetails(username, password) {
         this.usernameFields.slice(0, 1).forEach(field => {
-            field.value = username;
-            const changeEvent = new Event("change");
+            nativeInputValueSetter.call(field, username);
+            const inputEvent = new Event("input", { bubbles: true });
+            field.dispatchEvent(inputEvent);
+            const changeEvent = new Event("change", { bubbles: true });
             field.dispatchEvent(changeEvent);
         });
         this.passwordFields.slice(0, 1).forEach(field => {
-            field.value = password;
-            const changeEvent = new Event("change");
+            nativeInputValueSetter.call(field, password);
+            const inputEvent = new Event("input", { bubbles: true });
+            field.dispatchEvent(inputEvent);
+            const changeEvent = new Event("change", { bubbles: true });
             field.dispatchEvent(changeEvent);
         });
         return Promise.resolve();
