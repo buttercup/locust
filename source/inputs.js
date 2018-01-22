@@ -1,5 +1,7 @@
 import { PASSWORD_QUERIES, SUBMIT_BUTTON_QUERIES, USERNAME_QUERIES } from "./inputPatterns.js";
 
+const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+
 function fetchForms(queryEl = document) {
     return Array.prototype.slice.call(queryEl.getElementsByTagName("form"));
 }
@@ -28,4 +30,12 @@ function fetchSubmitButtons(queryEl = document) {
 function fetchUsernameInputs(queryEl = document) {
     const megaQuery = USERNAME_QUERIES.join(", ");
     return Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+}
+
+export function setInputValue(input, value) {
+    nativeInputValueSetter.call(input, value);
+    const inputEvent = new Event("input", { bubbles: true });
+    input.dispatchEvent(inputEvent);
+    const changeEvent = new Event("change", { bubbles: true });
+    input.dispatchEvent(changeEvent);
 }

@@ -1,9 +1,8 @@
 import isVisible from "is-visible";
 import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
+import { setInputValue } from "./inputs.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
-
-const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
 
 /**
  * The LoginTarget class which represents a 'target' for logging in
@@ -143,18 +142,10 @@ export default class LoginTarget {
      */
     enterDetails(username, password) {
         this.usernameFields.slice(0, 1).forEach(field => {
-            nativeInputValueSetter.call(field, username);
-            const inputEvent = new Event("input", { bubbles: true });
-            field.dispatchEvent(inputEvent);
-            const changeEvent = new Event("change", { bubbles: true });
-            field.dispatchEvent(changeEvent);
+            setInputValue(field, username);
         });
         this.passwordFields.slice(0, 1).forEach(field => {
-            nativeInputValueSetter.call(field, password);
-            const inputEvent = new Event("input", { bubbles: true });
-            field.dispatchEvent(inputEvent);
-            const changeEvent = new Event("change", { bubbles: true });
-            field.dispatchEvent(changeEvent);
+            setInputValue(field, password);
         });
         return Promise.resolve();
     }
