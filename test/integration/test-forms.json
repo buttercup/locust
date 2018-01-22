@@ -14,5 +14,13 @@
             "username": "input#login_field",
             "password": "input#password"
         }
+    },
+    {
+        "name": "DynDNS",
+        "url": "https://account.dyn.com/entrance/",
+        "expectedFields": {
+            "username": "input[id^=login][name=username]",
+            "password": "input[id^=login][type=password]"
+        }
     }
 ]
