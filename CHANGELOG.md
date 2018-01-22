@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v0.3.0
+_2018-01-22_
+
+ * #13 - Add more input selectors to match more login forms
+ * #14 - Fix login forms built with React (specialised listeners) (ReactDOM)
+
 ## v0.2.0
 _2018-01-19_
 
