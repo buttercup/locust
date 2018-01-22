@@ -23,14 +23,25 @@ export const SUBMIT_BUTTON_QUERIES = [
     "button[title*='sign-in' i]"
 ];
 
+const USERNAMES_OPTIONAL_TEXT = [
+    "input[id^=user]",
+    "input[name^=user]",
+    "input[id*=username i]",
+    "input[title*=username i]",
+    "input[placeholder*=username i]",
+    "input[name*=email i]",
+    "input[name*=login i]"
+].reduce(
+    (queries, next) => [
+        ...queries,
+        next.replace(/^input/, "input[type=text]"),
+        next.replace(/^input/, "input:not([type])")
+    ],
+    []
+);
+
 export const USERNAME_QUERIES = [
-    "input[type=text][id^=user]",
-    "input[type=text][name^=user]",
-    "input[type=text][id*=username i]",
-    "input[type=text][title*=username i]",
-    "input[type=text][placeholder*=username i]",
-    "input[type=text][name*=email i]",
-    "input[type=text][name*=login i]",
+    ...USERNAMES_OPTIONAL_TEXT,
     "input[type=email]",
     "input[aria-label*=username i]",
     "input[aria-label*=email i]"
