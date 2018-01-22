@@ -22,5 +22,13 @@
             "username": "input[id^=login][name=username]",
             "password": "input[id^=login][type=password]"
         }
+    },
+    {
+        "name": "Reddit",
+        "url": "https://www.reddit.com/",
+        "expectedFields": {
+            "username": "form[id^=login] input[type=text][name=user]",
+            "password": "form[id^=login] input[type=password][name=passwd]"
+        }
     }
 ]
