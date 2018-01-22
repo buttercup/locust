@@ -23,14 +23,30 @@ export const SUBMIT_BUTTON_QUERIES = [
     "button[title*='sign-in' i]"
 ];
 
+// These queries are all modified to that they match inputs of type=text as well
+// as inputs with no type attribute at all. Each line (query) is turned into 2
+// queries, one with "input[type=text]" as the new prefix (replacing "input") and
+// one with "input:not([type])".
+const USERNAMES_OPTIONAL_TEXT = [
+    "input[id^=user]",
+    "input[name^=user]",
+    "input[id*=username i]",
+    "input[title*=username i]",
+    "input[placeholder*=username i]",
+    "input[name*=email i]",
+    "input[name*=login i]"
+].reduce(
+    (queries, next) => [
+        ...queries,
+        next.replace(/^input/, "input[type=text]"),
+        next.replace(/^input/, "input:not([type])")
+    ],
+    []
+);
+
+// Regular username queries that are not transformed:
 export const USERNAME_QUERIES = [
-    "input[type=text][id^=user]",
-    "input[type=text][name^=user]",
-    "input[type=text][id*=username i]",
-    "input[type=text][title*=username i]",
-    "input[type=text][placeholder*=username i]",
-    "input[type=text][name*=email i]",
-    "input[type=text][name*=login i]",
+    ...USERNAMES_OPTIONAL_TEXT,
     "input[type=email]",
     "input[aria-label*=username i]",
     "input[aria-label*=email i]"
