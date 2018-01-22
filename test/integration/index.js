@@ -7,8 +7,16 @@ const LOCUST_PATH = path.resolve(__dirname, "../../dist/locust.min.js");
 function initialiseNightmare() {
     const nightmare = Nightmare({
         waitTimeout: 15000,
-        gotoTimeout: 15000
+        gotoTimeout: 15000,
+        webPreferences: {
+            allowRunningInsecureContent: true,
+            nodeIntegration: false,
+            webSecurity: false
+        }
     });
+    nightmare.useragent(
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3015.0 Safari/537.36"
+    );
     return nightmare;
 }
 
@@ -21,7 +29,7 @@ function testConfiguration(config, nightmare) {
     return nightmare
         .goto(url)
         .inject("js", LOCUST_PATH)
-        .wait(500)
+        .wait(1000)
         .evaluate(function(expectedFields) {
             if (!window.Locust) {
                 throw new Error("No global Locust variable found");
