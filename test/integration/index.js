@@ -24,29 +24,25 @@ function testConfiguration(config, nightmare) {
         .wait(500)
         .evaluate(function(expectedFields) {
             if (!window.Locust) {
-                return "error:No global Locust variable found";
+                throw new Error("No global Locust variable found");
             }
             const target = window.Locust.getLoginTarget();
             if (!target) {
-                return "error:No login targets found";
+                throw new Error("No login targets found");
             }
-            if (expectedFields.includes("username") && target.usernameFields.length === 0) {
-                return "error:No username field found";
+            if (expectedFields && expectedFields.username) {
+                const usernameField = document.querySelector(expectedFields.username);
+                if (target.usernameFields.includes(usernameField) !== true) {
+                    throw new Error(`No username field found matching query: ${expectedFields.username}`);
+                }
             }
-            if (expectedFields.includes("password") && target.passwordFields.length === 0) {
-                return "error:No password field found";
+            if (expectedFields && expectedFields.password) {
+                const passwordField = document.querySelector(expectedFields.password);
+                if (target.passwordFields.includes(passwordField) !== true) {
+                    throw new Error(`No password field found matching query: ${expectedFields.password}`);
+                }
             }
-            return "ok";
-        }, expectedFields)
-        .then(result => {
-            if (result === "ok") {
-            } else if (/^error:/.test(result)) {
-                const message = result.replace(/^error:/, "");
-                throw new Error(`Test failed: ${message}`);
-            } else {
-                throw new Error("Unknown error");
-            }
-        });
+        }, expectedFields);
 }
 
 console.log("Running integration tests:");

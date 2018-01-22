@@ -2,16 +2,17 @@
     {
         "name": "Outlook",
         "url": "https://outlook.live.com/owa/?authRedirect=true&nlp=1",
-        "expectedFields": ["username", "password"]
+        "expectedFields": {
+            "username": "input[type=email][name=loginfmt]",
+            "password": "input[type=password][name=passwd]"
+        }
     },
     {
         "name": "GitHub",
         "url": "https://github.com/login",
-        "expectedFields": ["username", "password"]
-    },
-    {
-        "name": "DynDNS",
-        "url": "https://account.dyn.com/entrance/",
-        "expectedFields": ["username", "password"]
+        "expectedFields": {
+            "username": "input#login_field",
+            "password": "input#password"
+        }
     }
 ]
