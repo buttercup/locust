@@ -12,9 +12,9 @@ export const FORCE_SUBMIT_DELAY = 7500;
 export default class LoginTarget {
     constructor() {
         this._form = null;
-        this._usernameFields = new Set();
-        this._passwordFields = new Set();
-        this._submitButtons = new Set();
+        this._usernameField = null;
+        this._passwordField = null;
+        this._submitButton = null;
         this._forceSubmitDelay = FORCE_SUBMIT_DELAY;
     }
 
@@ -36,34 +36,16 @@ export default class LoginTarget {
         return this._form;
     }
 
-    /**
-     * Array of password fields within the associated form
-     * @type {Array.<HTMLInputElement>}
-     * @readonly
-     * @memberof LoginTarget
-     */
-    get passwordFields() {
-        return [...this._passwordFields.values()];
+    get passwordField() {
+        return this._passwordField;
     }
 
-    /**
-     * Array of submit buttons within the associated form
-     * @type {Array.<HTMLInputElement|HTMLButtonElement>}
-     * @readonly
-     * @memberof LoginTarget
-     */
-    get submitButtons() {
-        return [...this._submitButtons.values()];
+    get submitButton() {
+        return this._submitButton;
     }
 
-    /**
-     * Array of username fields within the associated form
-     * @type {Array.<HTMLInputElement>}
-     * @readonly
-     * @memberof LoginTarget
-     */
-    get usernameFields() {
-        return [...this._usernameFields.values()];
+    get usernameField() {
+        return this._usernameField;
     }
 
     set forceSubmitDelay(delay) {
@@ -74,37 +56,16 @@ export default class LoginTarget {
         this._form = newForm;
     }
 
-    /**
-     * Add password fields to the target
-     * @param {...HTMLInputElement} fields The password fields
-     * @returns {LoginTarget} Self
-     * @memberof LoginTarget
-     */
-    addPasswordFields(...fields) {
-        for (const item of fields) this._passwordFields.add(item);
-        return this;
+    set passwordField(field) {
+        this._passwordField = field || null;
     }
 
-    /**
-     * Add submit buttons to the target
-     * @param {...HTMLInputElement} buttons The submit buttons
-     * @returns {LoginTarget} Self
-     * @memberof LoginTarget
-     */
-    addSubmitButtons(...buttons) {
-        for (const item of buttons) this._submitButtons.add(item);
-        return this;
+    set submitButton(button) {
+        this._submitButton = button || null;
     }
 
-    /**
-     * Add username fields to the target
-     * @param {...HTMLInputElement} fields The username fields
-     * @returns {LoginTarget} Self
-     * @memberof LoginTarget
-     */
-    addUsernameFields(...fields) {
-        for (const item of fields) this._usernameFields.add(item);
-        return this;
+    set usernameField(field) {
+        this._usernameField = field || null;
     }
 
     /**
@@ -116,15 +77,9 @@ export default class LoginTarget {
      */
     calculateScore() {
         let score = 0;
-        if (this.usernameFields.length > 0) {
-            score += this.usernameFields.length > 1 ? 5 : 10;
-        }
-        if (this.passwordFields.length > 0) {
-            score += this.passwordFields.length > 1 ? 5 : 10;
-        }
-        if (this.submitButtons.length > 0) {
-            score += this.submitButtons.length > 1 ? 5 : 10;
-        }
+        score += this.usernameField ? 10 : 0;
+        score += this.passwordField ? 10 : 0;
+        score += this.submitButton ? 10 : 0;
         if (isVisible(this.form)) {
             score += 10;
         }
@@ -141,12 +96,12 @@ export default class LoginTarget {
      *      loginTarget.enterDetails("myUsername", "myPassword");
      */
     enterDetails(username, password) {
-        this.usernameFields.slice(0, 1).forEach(field => {
-            setInputValue(field, username);
-        });
-        this.passwordFields.slice(0, 1).forEach(field => {
-            setInputValue(field, password);
-        });
+        if (this.usernameField) {
+            setInputValue(this.usernameField, username);
+        }
+        if (this.passwordField) {
+            setInputValue(this.passwordField, password);
+        }
         return Promise.resolve();
     }
 
@@ -182,14 +137,13 @@ export default class LoginTarget {
      * @memberof LoginTarget
      */
     submit(force = false) {
-        const [submitButton] = this.submitButtons;
-        if (!submitButton) {
+        if (!this.submitButton) {
             // No button, just try submitting
             this.form.submit();
             return Promise.resolve();
         }
         // Click button
-        submitButton.click();
+        this.submitButton.click();
         return force ? this._waitForNoUnload() : Promise.resolve();
     }
 
