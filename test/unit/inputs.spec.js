@@ -1,4 +1,4 @@
-import { fetchFormsWithInputs, setInputValue } from "../../source/inputs.js";
+import { fetchFormsWithInputs, setInputValue, sortFormElements } from "../../source/inputs.js";
 
 describe("inputs", function() {
     describe("fetchFormsWithInputs", function() {
@@ -81,6 +81,27 @@ describe("inputs", function() {
                 );
                 setInputValue(this.input, "456");
             });
+        });
+    });
+
+    describe("sortFormElements", function() {
+        beforeEach(function() {
+            this.username1 = document.createElement("input");
+            this.username2 = document.createElement("input");
+            this.username2.setAttribute("type", "email");
+            this.usernames = [this.username1, this.username2];
+        });
+
+        it("throws if no type is provided", function() {
+            expect(() => {
+                sortFormElements(this.usernames);
+            }).to.throw(/Type is invalid/i);
+        });
+
+        it("sorts username inputs correctly", function() {
+            const sorted = sortFormElements(this.usernames, "username");
+            expect(sorted[0]).to.equal(this.username2);
+            expect(sorted[1]).to.equal(this.username1);
         });
     });
 });
