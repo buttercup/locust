@@ -31,12 +31,13 @@ const USERNAMES_OPTIONAL_TEXT = [
     "input[id^=user]",
     "input[name^=user]",
     "input[id*=username i]",
-    "input[id*=loginemail i]",
     "input[id*=accountname i]",
     "input[title*=username i]",
     "input[placeholder*=username i]",
     "input[name*=email i]",
-    "input[name*=login i]"
+    "input[name*=login i]",
+    "input[id*=email i]",
+    "input[id*=login i]"
 ].reduce(
     (queries, next) => [
         ...queries,
