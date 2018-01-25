@@ -31,6 +31,7 @@ const USERNAMES_OPTIONAL_TEXT = [
     "input[id^=user]",
     "input[name^=user]",
     "input[id*=username i]",
+    "input[id*=loginemail i]",
     "input[id*=accountname i]",
     "input[title*=username i]",
     "input[placeholder*=username i]",
