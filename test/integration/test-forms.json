@@ -38,5 +38,13 @@
             "username": "form[name=signIn] input#ap_email",
             "password": "form[name=signIn] input#ap_password"
         }
+    },
+    {
+        "name": "New Relic",
+        "url": "https://rpm.newrelic.com/",
+        "expectedFields": {
+            "username": "#login_email",
+            "password": "#login_password"
+        }
     }
 ]

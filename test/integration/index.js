@@ -26,10 +26,13 @@ function testConfiguration(config, nightmare) {
     if (!expectedFields) {
         throw new Error(`Invalid test: No expected fields provided`);
     }
+    const waitForUsernameQuery = expectedFields.username || "body";
+    const waitForPasswordQuery = expectedFields.password || "body";
     return nightmare
         .goto(url)
         .inject("js", LOCUST_PATH)
-        .wait(1000)
+        .wait(waitForUsernameQuery)
+        .wait(waitForPasswordQuery)
         .evaluate(function(expectedFields) {
             if (!window.Locust) {
                 throw new Error("No global Locust variable found");
