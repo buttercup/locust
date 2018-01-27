@@ -8,6 +8,11 @@
 ## Functions
 
 <dl>
+<dt><a href="#_listenForChanges">_listenForChanges(type, input)</a></dt>
+<dd><p>Attach an event listener to listen for input changes
+Attaches listeners for username/password input changes and emits an event
+when a change is detected.</p>
+</dd>
 <dt><a href="#getLoginTarget">getLoginTarget(queryEl)</a> ⇒ <code><a href="#LoginTarget">LoginTarget</a></code> | <code>null</code></dt>
 <dd><p>Get the best login target on the current page</p>
 </dd>
@@ -28,12 +33,9 @@ they are to be the &#39;correct&#39; login form for the page.</p>
     * [new LoginTarget()](#new_LoginTarget_new)
     * [.forceSubmitDelay](#LoginTarget.forceSubmitDelay) : <code>Number</code>
     * [.form](#LoginTarget.form) : <code>HTMLFormElement</code>
-    * [.passwordFields](#LoginTarget.passwordFields) : <code>Array.&lt;HTMLInputElement&gt;</code>
-    * [.submitButtons](#LoginTarget.submitButtons) : <code>Array.&lt;(HTMLInputElement\|HTMLButtonElement)&gt;</code>
-    * [.usernameFields](#LoginTarget.usernameFields) : <code>Array.&lt;HTMLInputElement&gt;</code>
-    * [.addPasswordFields(...fields)](#LoginTarget.addPasswordFields) ⇒ [<code>LoginTarget</code>](#LoginTarget)
-    * [.addSubmitButtons(...buttons)](#LoginTarget.addSubmitButtons) ⇒ [<code>LoginTarget</code>](#LoginTarget)
-    * [.addUsernameFields(...fields)](#LoginTarget.addUsernameFields) ⇒ [<code>LoginTarget</code>](#LoginTarget)
+    * [.passwordField](#LoginTarget.passwordField) : <code>HTMLInputElement</code> \| <code>null</code>
+    * [.submitButton](#LoginTarget.submitButton) : <code>HTMLInputElement</code> \| <code>HTMLButtonElement</code> \| <code>null</code>
+    * [.usernameField](#LoginTarget.usernameField) : <code>HTMLInputElement</code> \| <code>null</code>
     * [.calculateScore()](#LoginTarget.calculateScore) ⇒ <code>Number</code>
     * [.enterDetails(username, password)](#LoginTarget.enterDetails) ⇒ <code>Promise</code>
     * [.login(username, password, [force])](#LoginTarget.login) ⇒ <code>Promise</code>
@@ -58,63 +60,24 @@ Delay in milliseconds that the library should wait before force submitting the f
 The target login form
 
 **Kind**: static property of [<code>LoginTarget</code>](#LoginTarget)  
-<a name="LoginTarget.passwordFields"></a>
+<a name="LoginTarget.passwordField"></a>
 
-### LoginTarget.passwordFields : <code>Array.&lt;HTMLInputElement&gt;</code>
-Array of password fields within the associated form
-
-**Kind**: static property of [<code>LoginTarget</code>](#LoginTarget)  
-**Read only**: true  
-<a name="LoginTarget.submitButtons"></a>
-
-### LoginTarget.submitButtons : <code>Array.&lt;(HTMLInputElement\|HTMLButtonElement)&gt;</code>
-Array of submit buttons within the associated form
+### LoginTarget.passwordField : <code>HTMLInputElement</code> \| <code>null</code>
+The password input element
 
 **Kind**: static property of [<code>LoginTarget</code>](#LoginTarget)  
-**Read only**: true  
-<a name="LoginTarget.usernameFields"></a>
+<a name="LoginTarget.submitButton"></a>
 
-### LoginTarget.usernameFields : <code>Array.&lt;HTMLInputElement&gt;</code>
-Array of username fields within the associated form
+### LoginTarget.submitButton : <code>HTMLInputElement</code> \| <code>HTMLButtonElement</code> \| <code>null</code>
+The submit button element
 
 **Kind**: static property of [<code>LoginTarget</code>](#LoginTarget)  
-**Read only**: true  
-<a name="LoginTarget.addPasswordFields"></a>
+<a name="LoginTarget.usernameField"></a>
 
-### LoginTarget.addPasswordFields(...fields) ⇒ [<code>LoginTarget</code>](#LoginTarget)
-Add password fields to the target
+### LoginTarget.usernameField : <code>HTMLInputElement</code> \| <code>null</code>
+The username input element
 
-**Kind**: static method of [<code>LoginTarget</code>](#LoginTarget)  
-**Returns**: [<code>LoginTarget</code>](#LoginTarget) - Self  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...fields | <code>HTMLInputElement</code> | The password fields |
-
-<a name="LoginTarget.addSubmitButtons"></a>
-
-### LoginTarget.addSubmitButtons(...buttons) ⇒ [<code>LoginTarget</code>](#LoginTarget)
-Add submit buttons to the target
-
-**Kind**: static method of [<code>LoginTarget</code>](#LoginTarget)  
-**Returns**: [<code>LoginTarget</code>](#LoginTarget) - Self  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...buttons | <code>HTMLInputElement</code> | The submit buttons |
-
-<a name="LoginTarget.addUsernameFields"></a>
-
-### LoginTarget.addUsernameFields(...fields) ⇒ [<code>LoginTarget</code>](#LoginTarget)
-Add username fields to the target
-
-**Kind**: static method of [<code>LoginTarget</code>](#LoginTarget)  
-**Returns**: [<code>LoginTarget</code>](#LoginTarget) - Self  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...fields | <code>HTMLInputElement</code> | The username fields |
-
+**Kind**: static property of [<code>LoginTarget</code>](#LoginTarget)  
 <a name="LoginTarget.calculateScore"></a>
 
 ### LoginTarget.calculateScore() ⇒ <code>Number</code>
@@ -191,6 +154,21 @@ time out
 **Returns**: <code>Promise</code> - A promise that resolves once either the delay has
 expired for the page has begun unloading.  
 **Access**: protected  
+<a name="_listenForChanges"></a>
+
+## _listenForChanges(type, input)
+Attach an event listener to listen for input changes
+Attaches listeners for username/password input changes and emits an event
+when a change is detected.
+
+**Kind**: global function  
+**Emits**: <code>LoginTarget#event:valueChanged</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>String</code> | The type of input (username/password) |
+| input | <code>HTMLInputElement</code> | The target input |
+
 <a name="getLoginTarget"></a>
 
 ## getLoginTarget(queryEl) ⇒ [<code>LoginTarget</code>](#LoginTarget) \| <code>null</code>
