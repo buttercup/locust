@@ -36,10 +36,6 @@ export function getLoginTargets(queryEl = document) {
         target.usernameField = usernameFields[0];
         target.passwordField = passwordFields[0];
         target.submitButton = submitButtons[0];
-        // target
-        //     .addUsernameFields(...usernameFields)
-        //     .addPasswordFields(...passwordFields)
-        //     .addSubmitButtons(...submitButtons);
         target.form = form;
         return target;
     });

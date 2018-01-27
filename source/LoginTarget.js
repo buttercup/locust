@@ -1,4 +1,5 @@
 import isVisible from "is-visible";
+import EventEmitter from "eventemitter3";
 import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
 import { setInputValue } from "./inputs.js";
 
@@ -9,13 +10,18 @@ export const FORCE_SUBMIT_DELAY = 7500;
  * with some credentials
  * @class LoginTarget
  */
-export default class LoginTarget {
+export default class LoginTarget extends EventEmitter {
     constructor() {
+        super();
         this._form = null;
         this._usernameField = null;
         this._passwordField = null;
         this._submitButton = null;
         this._forceSubmitDelay = FORCE_SUBMIT_DELAY;
+        this._changeListeners = {
+            username: null,
+            password: null
+        };
     }
 
     /**
@@ -57,7 +63,10 @@ export default class LoginTarget {
     }
 
     set passwordField(field) {
-        this._passwordField = field || null;
+        if (field) {
+            this._passwordField = field;
+            this._listenForChanges("password", field);
+        }
     }
 
     set submitButton(button) {
@@ -65,7 +74,10 @@ export default class LoginTarget {
     }
 
     set usernameField(field) {
-        this._usernameField = field || null;
+        if (field) {
+            this._usernameField = field;
+            this._listenForChanges("username", field);
+        }
     }
 
     /**
@@ -145,6 +157,38 @@ export default class LoginTarget {
         // Click button
         this.submitButton.click();
         return force ? this._waitForNoUnload() : Promise.resolve();
+    }
+
+    /**
+     * Attach an event listener to listen for input changes
+     * Attaches listeners for username/password input changes and emits an event
+     * when a change is detected.
+     * @param {String} type The type of input (username/password)
+     * @param {HTMLInputElement} input The target input
+     * @fires LoginTarget#valueChanged
+     */
+    _listenForChanges(type, input) {
+        if (/username|password/.test(type) !== true) {
+            throw new Error(`Failed listening for input changes: Unrecognised type: ${type}`);
+        }
+        if (this._changeListeners[type]) {
+            const { input, listener } = this._changeListeners[type];
+            input.removeEventListener("input", listener, false);
+        }
+        const emit = value => {
+            this.emit("valueChanged", {
+                type,
+                value
+            });
+        };
+        const onChange = function() {
+            emit(this.value);
+        };
+        this._changeListeners[type] = {
+            input,
+            listener: onChange
+        };
+        input.addEventListener("input", onChange, false);
     }
 
     /**
