@@ -39,7 +39,7 @@ module.exports = config => config.set({
 
     reporters: ["spec", "progress"],
 
-    singleRun: true,
+    singleRun: false,
 
     webpack: webpackConfig
 

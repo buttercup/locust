@@ -19,7 +19,8 @@
     "test:ci:integration": "run-s test:integration",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'",
     "test:integration": "npm run build && node test/integration/index.js",
-    "test:web": "karma start"
+    "test:web": "karma start --single-run",
+    "test:web:watch": "karma start --auto-watch"
   },
   "lint-staged": {
     "{{source,test}/**/*.js,webpack.config.js}": [
