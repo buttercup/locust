@@ -42,14 +42,29 @@ export default class LoginTarget extends EventEmitter {
         return this._form;
     }
 
+    /**
+     * The password input element
+     * @type {HTMLInputElement|null}
+     * @memberof LoginTarget
+     */
     get passwordField() {
         return this._passwordField;
     }
 
+    /**
+     * The submit button element
+     * @type {HTMLInputElement|HTMLButtonElement|null}
+     * @memberof LoginTarget
+     */
     get submitButton() {
         return this._submitButton;
     }
 
+    /**
+     * The username input element
+     * @type {HTMLInputElement|null}
+     * @memberof LoginTarget
+     */
     get usernameField() {
         return this._usernameField;
     }
@@ -171,19 +186,23 @@ export default class LoginTarget extends EventEmitter {
         if (/username|password/.test(type) !== true) {
             throw new Error(`Failed listening for input changes: Unrecognised type: ${type}`);
         }
+        // Check if a listener exists already, and clear it if it does
         if (this._changeListeners[type]) {
             const { input, listener } = this._changeListeners[type];
             input.removeEventListener("input", listener, false);
         }
+        // Emit a value change event
         const emit = value => {
             this.emit("valueChanged", {
                 type,
                 value
             });
         };
+        // Listener function for the input element
         const onChange = function() {
             emit(this.value);
         };
+        // Store the listener information
         this._changeListeners[type] = {
             input,
             listener: onChange
