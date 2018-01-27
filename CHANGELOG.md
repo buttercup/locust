@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v0.4.0
+_2018-01-27_
+
+ * Data update events for input changes
+ * Support for more login forms
+
 ## v0.3.0
 _2018-01-22_
 
