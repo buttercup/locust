@@ -33,10 +33,9 @@ export function getLoginTargets(queryEl = document) {
     return fetchFormsWithInputs(queryEl).map(info => {
         const { form, usernameFields, passwordFields, submitButtons } = info;
         const target = new LoginTarget();
-        target
-            .addUsernameFields(...usernameFields)
-            .addPasswordFields(...passwordFields)
-            .addSubmitButtons(...submitButtons);
+        target.usernameField = usernameFields[0];
+        target.passwordField = passwordFields[0];
+        target.submitButton = submitButtons[0];
         target.form = form;
         return target;
     });

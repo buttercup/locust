@@ -43,13 +43,13 @@ function testConfiguration(config, nightmare) {
             }
             if (expectedFields && expectedFields.username) {
                 const usernameField = document.querySelector(expectedFields.username);
-                if (target.usernameFields.includes(usernameField) !== true) {
+                if (target.usernameField !== usernameField) {
                     throw new Error(`No username field found matching query: ${expectedFields.username}`);
                 }
             }
             if (expectedFields && expectedFields.password) {
                 const passwordField = document.querySelector(expectedFields.password);
-                if (target.passwordFields.includes(passwordField) !== true) {
+                if (target.passwordField !== passwordField) {
                     throw new Error(`No password field found matching query: ${expectedFields.password}`);
                 }
             }
