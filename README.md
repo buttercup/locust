@@ -47,3 +47,28 @@ getLoginTarget().enterDetails("myUsername", "myPassword");
 _**Note** that `getLoginTarget` may return `null` if no form is found, so you should check for this eventuality._
 
 You can also read the [API documentation](https://github.com/buttercup/locust/blob/master/API.md) if you're into that kind of thing.
+
+### Events
+
+Locust login targets will emit events when certain things happen. To listen for changes to the values of usernames and passwords on forms simply attach event listeners:
+
+```javascript
+const target = getLoginTarget();
+target.on("valueChanged", info => {
+    if (info.type === "username") {
+        console.log("New username:", info.value);
+    }
+});
+// `type` can be "username" or "password"
+```
+
+> Login targets subclass [`EventEmitter`](https://github.com/primus/eventemitter3), so you can use all other methods provided by their implementation.
+
+You can also listen to form submission:
+
+```javascript
+const target = getLoginTarget();
+target.once("formSubmitted", ({ source }) => {
+    // `source` will either be "submitButton" or "form"
+});
+```

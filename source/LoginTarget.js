@@ -5,6 +5,21 @@ import { setInputValue } from "./inputs.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
 
+function getEventListenerForElement(type) {
+    switch (type) {
+        case "form":
+            return "submit";
+        case "submit":
+            return "click";
+        case "username":
+        /* falls-through */
+        case "password":
+        /* falls-through */
+        default:
+            return "input";
+    }
+}
+
 /**
  * The LoginTarget class which represents a 'target' for logging in
  * with some credentials
@@ -20,7 +35,9 @@ export default class LoginTarget extends EventEmitter {
         this._forceSubmitDelay = FORCE_SUBMIT_DELAY;
         this._changeListeners = {
             username: null,
-            password: null
+            password: null,
+            submit: null,
+            form: null
         };
     }
 
@@ -73,25 +90,31 @@ export default class LoginTarget extends EventEmitter {
         this._forceSubmitDelay = delay;
     }
 
-    set form(newForm) {
-        this._form = newForm;
+    set form(form) {
+        if (form) {
+            this._form = form;
+            this._listenForUpdates("form", form);
+        }
     }
 
     set passwordField(field) {
         if (field) {
             this._passwordField = field;
-            this._listenForChanges("password", field);
+            this._listenForUpdates("password", field);
         }
     }
 
     set submitButton(button) {
-        this._submitButton = button || null;
+        if (button) {
+            this._submitButton = button;
+            this._listenForUpdates("submit", button);
+        }
     }
 
     set usernameField(field) {
         if (field) {
             this._usernameField = field;
-            this._listenForChanges("username", field);
+            this._listenForUpdates("username", field);
         }
     }
 
@@ -181,33 +204,44 @@ export default class LoginTarget extends EventEmitter {
      * @param {String} type The type of input (username/password)
      * @param {HTMLInputElement} input The target input
      * @fires LoginTarget#valueChanged
+     * @fires LoginTarget#formSubmitted
      */
-    _listenForChanges(type, input) {
-        if (/username|password/.test(type) !== true) {
-            throw new Error(`Failed listening for input changes: Unrecognised type: ${type}`);
+    _listenForUpdates(type, input) {
+        if (/username|password|submit|form/.test(type) !== true) {
+            throw new Error(`Failed listening for field changes: Unrecognised type: ${type}`);
         }
+        // Detect the necessary event listener name
+        const eventListenerName = getEventListenerForElement(type);
         // Check if a listener exists already, and clear it if it does
         if (this._changeListeners[type]) {
             const { input, listener } = this._changeListeners[type];
-            input.removeEventListener("input", listener, false);
+            input.removeEventListener(eventListenerName, listener, false);
         }
         // Emit a value change event
-        const emit = value => {
-            this.emit("valueChanged", {
-                type,
-                value
-            });
-        };
-        // Listener function for the input element
-        const onChange = function() {
-            emit(this.value);
-        };
+        let handleEvent;
+        if (type === "submit" || type === "form") {
+            // Listener function for the submission of the form
+            const source = type === "form" ? "form" : "submitButton";
+            handleEvent = () => this.emit("formSubmitted", { source });
+        } else {
+            const emit = value => {
+                this.emit("valueChanged", {
+                    type,
+                    value
+                });
+            };
+            // Listener function for the input element
+            handleEvent = function() {
+                emit(this.value);
+            };
+        }
         // Store the listener information
         this._changeListeners[type] = {
             input,
-            listener: onChange
+            listener: handleEvent
         };
-        input.addEventListener("input", onChange, false);
+        // Attach the listener
+        input.addEventListener(eventListenerName, handleEvent, false);
     }
 
     /**
