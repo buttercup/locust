@@ -8,7 +8,7 @@
 ## Functions
 
 <dl>
-<dt><a href="#_listenForChanges">_listenForChanges(type, input)</a></dt>
+<dt><a href="#_listenForUpdates">_listenForUpdates(type, input)</a></dt>
 <dd><p>Attach an event listener to listen for input changes
 Attaches listeners for username/password input changes and emits an event
 when a change is detected.</p>
@@ -154,15 +154,15 @@ time out
 **Returns**: <code>Promise</code> - A promise that resolves once either the delay has
 expired for the page has begun unloading.  
 **Access**: protected  
-<a name="_listenForChanges"></a>
+<a name="_listenForUpdates"></a>
 
-## _listenForChanges(type, input)
+## _listenForUpdates(type, input)
 Attach an event listener to listen for input changes
 Attaches listeners for username/password input changes and emits an event
 when a change is detected.
 
 **Kind**: global function  
-**Emits**: <code>LoginTarget#event:valueChanged</code>  
+**Emits**: <code>LoginTarget#event:valueChanged</code>, <code>LoginTarget#event:formSubmitted</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
