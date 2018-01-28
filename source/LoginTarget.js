@@ -5,6 +5,21 @@ import { setInputValue } from "./inputs.js";
 
 export const FORCE_SUBMIT_DELAY = 7500;
 
+function getEventListenerForElement(type) {
+    switch (type) {
+        case "form":
+            return "submit";
+        case "submit":
+            return "click";
+        case "username":
+        /* falls-through */
+        case "password":
+        /* falls-through */
+        default:
+            return "input";
+    }
+}
+
 /**
  * The LoginTarget class which represents a 'target' for logging in
  * with some credentials
@@ -194,16 +209,12 @@ export default class LoginTarget extends EventEmitter {
         if (/username|password|submit|form/.test(type) !== true) {
             throw new Error(`Failed listening for field changes: Unrecognised type: ${type}`);
         }
+        // Detect the necessary event listener name
+        const eventListenerName = getEventListenerForElement(type);
         // Check if a listener exists already, and clear it if it does
         if (this._changeListeners[type]) {
             const { input, listener } = this._changeListeners[type];
-            if (type === "form") {
-                input.removeEventListener("submit", listener, false);
-            } else if (type === "submit") {
-                input.removeEventListener("click", listener, false);
-            } else {
-                input.removeEventListener("input", listener, false);
-            }
+            input.removeEventListener(eventListenerName, listener, false);
         }
         // Emit a value change event
         let handleEvent;
@@ -229,13 +240,7 @@ export default class LoginTarget extends EventEmitter {
             listener: handleEvent
         };
         // Attach the listener
-        if (type === "form") {
-            input.addEventListener("submit", handleEvent, false);
-        } else if (type === "submit") {
-            input.addEventListener("click", handleEvent, false);
-        } else {
-            input.addEventListener("input", handleEvent, false);
-        }
+        input.addEventListener(eventListenerName, handleEvent, false);
     }
 
     /**
