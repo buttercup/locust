@@ -1,5 +1,10 @@
 # Locust Changelog
 
+## v0.5.0
+_2018-01-28_
+
+ * Event listeners for form submission
+
 ## v0.4.0
 _2018-01-27_
 
