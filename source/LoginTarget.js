@@ -204,6 +204,7 @@ export default class LoginTarget extends EventEmitter {
      * @param {String} type The type of input (username/password)
      * @param {HTMLInputElement} input The target input
      * @fires LoginTarget#valueChanged
+     * @fires LoginTarget#formSubmitted
      */
     _listenForUpdates(type, input) {
         if (/username|password|submit|form/.test(type) !== true) {
