@@ -30,6 +30,38 @@ describe("LoginTarget", function() {
         expect(currentValue).to.equal("user5644");
     });
 
+    it("fires events when the submit button is clicked", function() {
+        let formSubmitted = 0;
+        this.target.on("formSubmitted", info => {
+            if (info.source === "submitButton") {
+                formSubmitted += 1;
+            }
+        });
+        const button = (this.target.submitButton = document.createElement("button"));
+        button.type = "button";
+        button.click();
+        expect(formSubmitted).to.equal(1);
+    });
+
+    it("fires events when the form is submitted", function() {
+        let formSubmitted = 0;
+        this.target.on("formSubmitted", info => {
+            if (info.source === "form") {
+                formSubmitted += 1;
+            }
+        });
+        const fakeForm = {
+            addEventListener: sinon.spy()
+        };
+        this.target.form = fakeForm;
+        expect(fakeForm.addEventListener.calledWith("submit")).to.be.true;
+        expect(fakeForm.addEventListener.calledOnce).to.be.true;
+        const eventListener = fakeForm.addEventListener.firstCall.args[1];
+        // Simulate submit
+        eventListener();
+        expect(formSubmitted).to.equal(1);
+    });
+
     it("fires events when password inputs are updated", function() {
         let currentValue = "";
         this.target.passwordField = document.createElement("input");
@@ -101,9 +133,8 @@ describe("LoginTarget", function() {
 
     describe("submit", function() {
         beforeEach(function() {
-            this.target.submitButton = this.submitButton = {
-                click: sinon.spy()
-            };
+            this.target.submitButton = this.submitButton = document.createElement("input");
+            sinon.stub(this.submitButton, "click");
         });
 
         it("clicks the submit button", function() {
