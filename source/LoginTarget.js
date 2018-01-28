@@ -20,7 +20,9 @@ export default class LoginTarget extends EventEmitter {
         this._forceSubmitDelay = FORCE_SUBMIT_DELAY;
         this._changeListeners = {
             username: null,
-            password: null
+            password: null,
+            submit: null,
+            form: null
         };
     }
 
@@ -73,25 +75,31 @@ export default class LoginTarget extends EventEmitter {
         this._forceSubmitDelay = delay;
     }
 
-    set form(newForm) {
-        this._form = newForm;
+    set form(form) {
+        if (form) {
+            this._form = form;
+            this._listenForUpdates("form", form);
+        }
     }
 
     set passwordField(field) {
         if (field) {
             this._passwordField = field;
-            this._listenForChanges("password", field);
+            this._listenForUpdates("password", field);
         }
     }
 
     set submitButton(button) {
-        this._submitButton = button || null;
+        if (button) {
+            this._submitButton = button;
+            this._listenForUpdates("submit", button);
+        }
     }
 
     set usernameField(field) {
         if (field) {
             this._usernameField = field;
-            this._listenForChanges("username", field);
+            this._listenForUpdates("username", field);
         }
     }
 
@@ -182,32 +190,52 @@ export default class LoginTarget extends EventEmitter {
      * @param {HTMLInputElement} input The target input
      * @fires LoginTarget#valueChanged
      */
-    _listenForChanges(type, input) {
-        if (/username|password/.test(type) !== true) {
-            throw new Error(`Failed listening for input changes: Unrecognised type: ${type}`);
+    _listenForUpdates(type, input) {
+        if (/username|password|submit|form/.test(type) !== true) {
+            throw new Error(`Failed listening for field changes: Unrecognised type: ${type}`);
         }
         // Check if a listener exists already, and clear it if it does
         if (this._changeListeners[type]) {
             const { input, listener } = this._changeListeners[type];
-            input.removeEventListener("input", listener, false);
+            if (type === "form") {
+                input.removeEventListener("submit", listener, false);
+            } else if (type === "submit") {
+                input.removeEventListener("click", listener, false);
+            } else {
+                input.removeEventListener("input", listener, false);
+            }
         }
         // Emit a value change event
-        const emit = value => {
-            this.emit("valueChanged", {
-                type,
-                value
-            });
-        };
-        // Listener function for the input element
-        const onChange = function() {
-            emit(this.value);
-        };
+        let handleEvent;
+        if (type === "submit" || type === "form") {
+            // Listener function for the submission of the form
+            const source = type === "form" ? "form" : "submitButton";
+            handleEvent = () => this.emit("formSubmitted", { source });
+        } else {
+            const emit = value => {
+                this.emit("valueChanged", {
+                    type,
+                    value
+                });
+            };
+            // Listener function for the input element
+            handleEvent = function() {
+                emit(this.value);
+            };
+        }
         // Store the listener information
         this._changeListeners[type] = {
             input,
-            listener: onChange
+            listener: handleEvent
         };
-        input.addEventListener("input", onChange, false);
+        // Attach the listener
+        if (type === "form") {
+            input.addEventListener("submit", handleEvent, false);
+        } else if (type === "submit") {
+            input.addEventListener("click", handleEvent, false);
+        } else {
+            input.addEventListener("input", handleEvent, false);
+        }
     }
 
     /**
