@@ -13,7 +13,7 @@
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
     "prepublishOnly": "run-s build docs",
-    "pub": "np",
+    "pub": "np --no-cleanup",
     "test": "run-s test:web test:integration test:format",
     "test:ci:general": "run-s test:web test:format",
     "test:ci:integration": "run-s test:integration",
