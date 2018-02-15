@@ -137,6 +137,36 @@ export default class LoginTarget extends EventEmitter {
     }
 
     /**
+     * Fill username into the username field.
+     * @param {String} username The username to enter
+     * @returns {Promise} A promise that resolves once the data has been entered
+     * @memberof LoginTarget
+     * @example
+     *      loginTarget.fillUsername("myUsername")
+     */
+    fillUsername(username) {
+        if (this.usernameField) {
+            setInputValue(this.usernameField, username);
+        }
+        return Promise.resolve();
+    }
+
+    /**
+     * Fill password into the password field.
+     * @param {String} password The password to enter
+     * @returns {Promise} A promise that resolves once the data has been entered
+     * @memberof LoginTarget
+     * @example
+     *      loginTarget.fillPassword("myPassword")
+     */
+    fillPassword(password) {
+        if (this.passwordField) {
+            setInputValue(this.passwordField, password);
+        }
+        return Promise.resolve();
+    }
+
+    /**
      * Enter credentials into the form without logging in
      * @param {String} username The username to enter
      * @param {String} password The password to enter
@@ -146,13 +176,7 @@ export default class LoginTarget extends EventEmitter {
      *      loginTarget.enterDetails("myUsername", "myPassword");
      */
     enterDetails(username, password) {
-        if (this.usernameField) {
-            setInputValue(this.usernameField, username);
-        }
-        if (this.passwordField) {
-            setInputValue(this.passwordField, password);
-        }
-        return Promise.resolve();
+        return Promise.all([this.fillUsername(username), this.fillPassword(password)]);
     }
 
     /**
