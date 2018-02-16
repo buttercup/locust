@@ -1,5 +1,10 @@
 # Locust Changelog
 
+## v0.6.0
+_2018-02-16_
+
+ * Add methods for filling specific form inputs only
+
 ## v0.5.0
 _2018-01-28_
 

@@ -37,6 +37,8 @@ they are to be the &#39;correct&#39; login form for the page.</p>
     * [.submitButton](#LoginTarget.submitButton) : <code>HTMLInputElement</code> \| <code>HTMLButtonElement</code> \| <code>null</code>
     * [.usernameField](#LoginTarget.usernameField) : <code>HTMLInputElement</code> \| <code>null</code>
     * [.calculateScore()](#LoginTarget.calculateScore) ⇒ <code>Number</code>
+    * [.fillUsername(username)](#LoginTarget.fillUsername) ⇒ <code>Promise</code>
+    * [.fillPassword(password)](#LoginTarget.fillPassword) ⇒ <code>Promise</code>
     * [.enterDetails(username, password)](#LoginTarget.enterDetails) ⇒ <code>Promise</code>
     * [.login(username, password, [force])](#LoginTarget.login) ⇒ <code>Promise</code>
     * [.submit([force])](#LoginTarget.submit)
@@ -87,6 +89,38 @@ the correct login form. Higher number is better.
 
 **Kind**: static method of [<code>LoginTarget</code>](#LoginTarget)  
 **Returns**: <code>Number</code> - The calculated score  
+<a name="LoginTarget.fillUsername"></a>
+
+### LoginTarget.fillUsername(username) ⇒ <code>Promise</code>
+Fill username into the username field.
+
+**Kind**: static method of [<code>LoginTarget</code>](#LoginTarget)  
+**Returns**: <code>Promise</code> - A promise that resolves once the data has been entered  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| username | <code>String</code> | The username to enter |
+
+**Example**  
+```js
+loginTarget.fillUsername("myUsername")
+```
+<a name="LoginTarget.fillPassword"></a>
+
+### LoginTarget.fillPassword(password) ⇒ <code>Promise</code>
+Fill password into the password field.
+
+**Kind**: static method of [<code>LoginTarget</code>](#LoginTarget)  
+**Returns**: <code>Promise</code> - A promise that resolves once the data has been entered  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| password | <code>String</code> | The password to enter |
+
+**Example**  
+```js
+loginTarget.fillPassword("myPassword")
+```
 <a name="LoginTarget.enterDetails"></a>
 
 ### LoginTarget.enterDetails(username, password) ⇒ <code>Promise</code>
