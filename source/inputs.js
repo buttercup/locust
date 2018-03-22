@@ -1,3 +1,4 @@
+import isVisible from "is-visible";
 import { PASSWORD_QUERIES, SUBMIT_BUTTON_QUERIES, USERNAME_QUERIES } from "./inputPatterns.js";
 
 const FORM_ELEMENT_SCORING = {
@@ -27,6 +28,7 @@ const FORM_ELEMENT_SCORING = {
         { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 }
     ]
 };
+const VISIBILE_SCORE_INCREMENT = 8;
 
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
 
@@ -47,17 +49,20 @@ export function fetchFormsWithInputs(queryEl = document) {
 
 function fetchPasswordInputs(queryEl = document) {
     const megaQuery = PASSWORD_QUERIES.join(", ");
-    return Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    return sortFormElements(inputs, "password");
 }
 
 function fetchSubmitButtons(queryEl = document) {
     const megaQuery = SUBMIT_BUTTON_QUERIES.join(", ");
-    return Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    return sortFormElements(inputs, "submit");
 }
 
 function fetchUsernameInputs(queryEl = document) {
     const megaQuery = USERNAME_QUERIES.join(", ");
-    return Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    return sortFormElements(inputs, "username");
 }
 
 export function setInputValue(input, value) {
@@ -75,10 +80,15 @@ export function sortFormElements(elements, type) {
     }
     const getInputScore = input => {
         const html = input.outerHTML;
-        return tests.reduce((current, check) => {
+        let score = tests.reduce((current, check) => {
             const value = check.test.test(html) ? check.value : 0;
             return current + value;
         }, 0);
+        if (isVisible(input)) {
+            score += VISIBILE_SCORE_INCREMENT;
+        }
+        input.setAttribute("data-bcup-score", score);
+        return score;
     };
     return elements.sort((elA, elB) => {
         const scoreA = getInputScore(elA);
