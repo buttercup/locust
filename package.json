@@ -27,7 +27,7 @@
       "git add"
     ]
   },
-  "author": "",
+  "author": "Perry Mitchell <perry@perrymitchell>",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.0",
