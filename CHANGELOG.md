@@ -1,5 +1,10 @@
 # Locust Changelog
 
+## v0.7.0
+_2018-03-22_
+
+ * Add more scoring rules for form elements
+
 ## v0.6.0
 _2018-02-16_
 
