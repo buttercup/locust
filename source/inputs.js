@@ -5,9 +5,14 @@ const FORM_ELEMENT_SCORING = {
         { test: /type="text"/, value: 2 },
         { test: /type="email"/, value: 6 },
         { test: /placeholder="[^\"]*username/i, value: 9 },
+        { test: /placeholder="[^\"]*e-?mail/i, value: 4 },
         { test: /name="username"/, value: 10 },
         { test: /id="username"/, value: 10 },
-        { test: /(name|id)="(username|login)/, value: 8 }
+        { test: /(name|id)="(username|login)/, value: 8 },
+        { test: /id="user/, value: 5 },
+        { test: /name="user/, value: 5 },
+        { test: /autocorrect="off"/, value: 1 },
+        { test: /autocapitalize="off"/, value: 1 }
     ],
     password: [
         { test: /type="password"/, value: 10 },
