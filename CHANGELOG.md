@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v0.8.0
+_2018-03-22_
+
+ * Sort detected form inputs by scores
+ * Sort detected form inputs by viewability
+
 ## v0.7.0
 _2018-03-22_
 
