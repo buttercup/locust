@@ -1,5 +1,12 @@
 # Locust Changelog
 
+## v0.9.0
+_2018-08-23_
+
+ * Add more selectors to recognise more login forms
+ * Improve filtering and scoring of login forms
+ * Improve form detection
+
 ## v0.8.0
 _2018-03-22_
 
