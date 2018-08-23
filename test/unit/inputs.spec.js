@@ -1,18 +1,24 @@
 import { fetchFormsWithInputs, setInputValue, sortFormElements } from "../../source/inputs.js";
+import { FORM_QUERIES } from "../../source/inputPatterns.js";
 
 describe("inputs", function() {
     describe("fetchFormsWithInputs", function() {
         beforeEach(function() {
             this.forms = [];
+            const qsaStub = sinon.stub();
+            qsaStub
+                .returns([])
+                .onFirstCall()
+                .returns(this.forms);
             this.queryEl = {
-                getElementsByTagName: sinon.stub().returns(this.forms)
+                querySelectorAll: qsaStub
             };
         });
 
         it("fetches forms by name", function() {
             fetchFormsWithInputs(this.queryEl);
-            expect(this.queryEl.getElementsByTagName.calledWithExactly("form")).to.be.true;
-            expect(this.queryEl.getElementsByTagName.calledOnce).to.be.true;
+            expect(this.queryEl.querySelectorAll.calledWithExactly(FORM_QUERIES.join(","))).to.be.true;
+            expect(this.queryEl.querySelectorAll.calledOnce).to.be.true;
         });
 
         it("fetches elements under form", function() {

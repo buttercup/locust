@@ -25,10 +25,10 @@
     },
     {
         "name": "Reddit",
-        "url": "https://www.reddit.com/",
+        "url": "https://www.reddit.com/login",
         "expectedFields": {
-            "username": "form[id^=login] input[type=text][name=user]",
-            "password": "form[id^=login] input[type=password][name=passwd]"
+            "username": "#loginUsername",
+            "password": "#loginPassword"
         }
     },
     {

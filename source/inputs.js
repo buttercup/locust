@@ -1,5 +1,5 @@
 import isVisible from "is-visible";
-import { PASSWORD_QUERIES, SUBMIT_BUTTON_QUERIES, USERNAME_QUERIES } from "./inputPatterns.js";
+import { FORM_QUERIES, PASSWORD_QUERIES, SUBMIT_BUTTON_QUERIES, USERNAME_QUERIES } from "./inputPatterns.js";
 
 const FORM_ELEMENT_SCORING = {
     username: [
@@ -9,15 +9,19 @@ const FORM_ELEMENT_SCORING = {
         { test: /placeholder="[^\"]*e-?mail/i, value: 4 },
         { test: /name="username"/, value: 10 },
         { test: /id="username"/, value: 10 },
+        { test: /id="usr/, value: 4 },
         { test: /(name|id)="(username|login)/, value: 8 },
         { test: /id="user/, value: 5 },
         { test: /name="user/, value: 5 },
         { test: /autocorrect="off"/, value: 1 },
-        { test: /autocapitalize="off"/, value: 1 }
+        { test: /autocapitalize="off"/, value: 1 },
+        { test: /class="([^\"]*\b|)((uname|usr)\b)/, value: 1 },
+        { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 }
     ],
     password: [
         { test: /type="password"/, value: 10 },
         { test: /name="pass/, value: 8 },
+        { test: /id="pwd/, value: 4 },
         { test: /title="pass/, value: 6 },
         { test: /id="password"/, value: 10 },
         { test: /(name|id)="pass/, value: 7 },
@@ -25,7 +29,8 @@ const FORM_ELEMENT_SCORING = {
     ],
     submit: [
         { test: /type="submit"/, value: 5 },
-        { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 }
+        { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 },
+        { test: /data-bcup-haslogintext="yes"/, value: 8 }
     ]
 };
 const VISIBILE_SCORE_INCREMENT = 8;
@@ -33,7 +38,7 @@ const VISIBILE_SCORE_INCREMENT = 8;
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
 
 function fetchForms(queryEl = document) {
-    return Array.prototype.slice.call(queryEl.getElementsByTagName("form"));
+    return Array.prototype.slice.call(queryEl.querySelectorAll(FORM_QUERIES.join(",")));
 }
 
 export function fetchFormsWithInputs(queryEl = document) {
