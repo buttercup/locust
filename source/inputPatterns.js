@@ -25,7 +25,8 @@ export const SUBMIT_BUTTON_QUERIES = [
     "button[title*=signin i]",
     "button[title*='sign in' i]",
     "button[title*='sign-in' i]",
-    "div[role=button]"
+    "div[role=button]",
+    "[data-bcup-haslogintext=yes]"
 ];
 
 // These queries are all modified to that they match inputs of type=text as well

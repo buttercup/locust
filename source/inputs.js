@@ -29,7 +29,8 @@ const FORM_ELEMENT_SCORING = {
     ],
     submit: [
         { test: /type="submit"/, value: 5 },
-        { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 }
+        { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 },
+        { test: /data-bcup-haslogintext="yes"/, value: 8 }
     ]
 };
 const VISIBILE_SCORE_INCREMENT = 8;

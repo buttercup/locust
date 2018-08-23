@@ -1,5 +1,6 @@
 import { fetchFormsWithInputs } from "./inputs.js";
 import LoginTarget from "./LoginTarget.js";
+import { revealShySubmitButtons } from "./prepare.js";
 
 /**
  * Get the best login target on the current page
@@ -8,6 +9,7 @@ import LoginTarget from "./LoginTarget.js";
  * @see getLoginTargets
  */
 export function getLoginTarget(queryEl = document) {
+    revealShySubmitButtons(queryEl);
     const targets = getLoginTargets(queryEl);
     let bestScore = -1,
         bestTarget = null;
@@ -30,6 +32,7 @@ export function getLoginTarget(queryEl = document) {
  * @returns {Array.<LoginTarget>} An array of login targets
  */
 export function getLoginTargets(queryEl = document) {
+    revealShySubmitButtons(queryEl);
     return fetchFormsWithInputs(queryEl).map(info => {
         const { form, usernameFields, passwordFields, submitButtons } = info;
         const target = new LoginTarget();
