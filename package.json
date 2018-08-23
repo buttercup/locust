@@ -1,6 +1,6 @@
 {
   "name": "@buttercup/locust",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Locust Login Toolkit",
   "main": "dist/locust.min.js",
   "files": [
