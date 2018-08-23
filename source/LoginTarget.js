@@ -28,6 +28,7 @@ function getEventListenerForElement(type) {
 export default class LoginTarget extends EventEmitter {
     constructor() {
         super();
+        this.baseScore = 0;
         this._form = null;
         this._usernameField = null;
         this._passwordField = null;
@@ -126,7 +127,7 @@ export default class LoginTarget extends EventEmitter {
      * @memberof LoginTarget
      */
     calculateScore() {
-        let score = 0;
+        let score = this.baseScore;
         score += this.usernameField ? 10 : 0;
         score += this.passwordField ? 10 : 0;
         score += this.submitButton ? 10 : 0;

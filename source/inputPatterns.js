@@ -1,13 +1,17 @@
 // NB: Some of these selectors use the case-insensitive flag, which is only
 // available in CSS 4 selectors: https://caniuse.com/#feat=css-case-insensitive
 
+export const FORM_QUERIES = ["form", "div.login", "div.signin"];
+
 export const PASSWORD_QUERIES = [
     "input[type=password]",
     "input[name^=pass]",
+    "input[id^=pwd]",
     "input[title*=password i]",
     "input[placeholder*=password i]",
     "input[id*=password i]",
-    "input[aria-label*=password i]"
+    "input[aria-label*=password i]",
+    ".login input[type=password]"
 ];
 
 export const SUBMIT_BUTTON_QUERIES = [
@@ -20,7 +24,8 @@ export const SUBMIT_BUTTON_QUERIES = [
     "button[title*='log in' i]",
     "button[title*=signin i]",
     "button[title*='sign in' i]",
-    "button[title*='sign-in' i]"
+    "button[title*='sign-in' i]",
+    "div[role=button]"
 ];
 
 // These queries are all modified to that they match inputs of type=text as well
@@ -29,6 +34,7 @@ export const SUBMIT_BUTTON_QUERIES = [
 // one with "input:not([type])".
 const USERNAMES_OPTIONAL_TEXT = [
     "input[id^=user]",
+    "input[id^=usr]",
     "input[name^=user]",
     "input[id*=username i]",
     "input[id*=accountname i]",
@@ -52,5 +58,7 @@ export const USERNAME_QUERIES = [
     ...USERNAMES_OPTIONAL_TEXT,
     "input[type=email]",
     "input[aria-label*=username i]",
-    "input[aria-label*=email i]"
+    "input[aria-label*=email i]",
+    ".login input[type=text]",
+    ".login input[type=email]"
 ];

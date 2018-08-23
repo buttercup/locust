@@ -37,6 +37,15 @@ export function getLoginTargets(queryEl = document) {
         target.passwordField = passwordFields[0];
         target.submitButton = submitButtons[0];
         target.form = form;
+        if (submitButtons.length > 1) {
+            target.baseScore -= 2;
+        }
+        if (usernameFields.length > 1) {
+            target.baseScore -= 1;
+        }
+        if (passwordFields.length > 1) {
+            target.baseScore -= 2;
+        }
         return target;
     });
 }
