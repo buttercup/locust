@@ -62,8 +62,7 @@ const nightmare = initialiseNightmare();
 TESTS.forEach(test => {
     work = work.then(() => testConfiguration(test, nightmare));
 });
-work
-    .then(() => nightmare.end())
+work.then(() => nightmare.end())
     .then(() => {
         console.log("Tests complete.");
     })
