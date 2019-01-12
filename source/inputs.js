@@ -52,7 +52,7 @@ export function fetchFormsWithInputs(queryEl = document) {
             passwordFields: fetchPasswordInputs(formEl),
             submitButtons: fetchSubmitButtons(formEl)
         }))
-        .filter(form => form.passwordFields.length > 0);
+        .filter(form => (form.passwordFields.length + form.usernameFields.length) > 0);
 }
 
 function fetchPasswordInputs(queryEl = document) {
