@@ -13,10 +13,13 @@ const FORM_ELEMENT_SCORING = {
         { test: /(name|id)="(username|login)/, value: 8 },
         { test: /id="user/, value: 5 },
         { test: /name="user/, value: 5 },
+        { test: /autocomplete="username"/, value: 6 },
+        { test: /autocomplete="[^"]*user/, value: 1 },
         { test: /autocorrect="off"/, value: 1 },
         { test: /autocapitalize="off"/, value: 1 },
         { test: /class="([^\"]*\b|)((uname|usr)\b)/, value: 1 },
-        { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 }
+        { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 },
+        { test: /formcontrolname="[^\"]*user/i, value: 1 }
     ],
     password: [
         { test: /type="password"/, value: 10 },
@@ -30,7 +33,9 @@ const FORM_ELEMENT_SCORING = {
     submit: [
         { test: /type="submit"/, value: 5 },
         { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 },
-        { test: /data-bcup-haslogintext="yes"/, value: 8 }
+        { test: /<input.+data-bcup-haslogintext="yes"/, value: 8 },
+        { test: /<button.+data-bcup-haslogintext="yes"/, value: 8 },
+        { test: /<a .*data-bcup-haslogintext="yes"/, value: 2 }
     ]
 };
 const VISIBILE_SCORE_INCREMENT = 8;
@@ -49,7 +54,7 @@ export function fetchFormsWithInputs(queryEl = document) {
             passwordFields: fetchPasswordInputs(formEl),
             submitButtons: fetchSubmitButtons(formEl)
         }))
-        .filter(form => form.passwordFields.length > 0);
+        .filter(form => form.passwordFields.length + form.usernameFields.length > 0);
 }
 
 function fetchPasswordInputs(queryEl = document) {

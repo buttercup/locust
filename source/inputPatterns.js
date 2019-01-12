@@ -36,15 +36,19 @@ export const SUBMIT_BUTTON_QUERIES = [
 const USERNAMES_OPTIONAL_TEXT = [
     "input[id^=user]",
     "input[id^=usr]",
-    "input[name^=user]",
+    "input[name^=user i]",
     "input[id*=username i]",
     "input[id*=accountname i]",
     "input[title*=username i]",
     "input[placeholder*=username i]",
+    "input[placeholder*=email i]",
+    "input[autocomplete*=user]",
     "input[name*=email i]",
     "input[name*=login i]",
     "input[id*=email i]",
-    "input[id*=login i]"
+    "input[id*=login i]",
+    "input[formcontrolname*=user i]",
+    "input[class*=user i]"
 ].reduce(
     (queries, next) => [
         ...queries,
@@ -61,5 +65,7 @@ export const USERNAME_QUERIES = [
     "input[aria-label*=username i]",
     "input[aria-label*=email i]",
     ".login input[type=text]",
-    ".login input[type=email]"
+    ".login input[type=email]",
+    "form[id*=login i] input[type=text]",
+    "form[name*=login i] input[type=text]"
 ];

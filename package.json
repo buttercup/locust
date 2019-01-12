@@ -9,11 +9,12 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "concurrently 'npm run watch' 'npm run serve'",
+    "dev:inject": "concurrently 'INJECT=yes npm run watch' 'npm run serve'",
     "docs": "jsdoc2md source/**/*.js > API.md",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
     "prepublishOnly": "run-s build docs",
-    "serve": "serve ./dist/ -p 8000",
+    "serve": "serve ./dist/ -p 8081",
     "test": "run-s test:web test:integration test:format",
     "test:ci:general": "run-s test:web test:format",
     "test:ci:integration": "run-s test:integration",

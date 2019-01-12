@@ -1,8 +1,8 @@
 import { SUBMIT_BUTTON_QUERIES } from "./inputPatterns.js";
 
 const LOGIN_BUTTON_ATTR = "data-bcup-haslogintext";
-const LOGIN_TEXT_REXP = /^(login|log in|log-in|signin|sign in|sign-in)$/i;
-const REGULAR_BUTTONS = ["button"];
+const LOGIN_TEXT_REXP = /^(login|log in|log-in|signin|sign in|sign-in|enter|next|continue)$/i;
+const REGULAR_BUTTONS = ["button", "a"];
 
 export function revealShySubmitButtons(queryEl = document) {
     const query = [...SUBMIT_BUTTON_QUERIES, ...REGULAR_BUTTONS].join(",");
