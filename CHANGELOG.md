@@ -1,5 +1,12 @@
 # Locust Changelog
 
+## v0.10.0
+_2019-01-12_
+
+ * Add more selectors for more forms
+ * Reduce requirement of min-password-fields to require at least 1 username *or* password field
+ * Add recognition for more submit buttons
+
 ## v0.9.0
 _2018-08-23_
 
