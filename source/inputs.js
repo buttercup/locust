@@ -13,10 +13,13 @@ const FORM_ELEMENT_SCORING = {
         { test: /(name|id)="(username|login)/, value: 8 },
         { test: /id="user/, value: 5 },
         { test: /name="user/, value: 5 },
+        { test: /autocomplete="username"/, value: 6 },
+        { test: /autocomplete="[^"]*user/, value: 1 },
         { test: /autocorrect="off"/, value: 1 },
         { test: /autocapitalize="off"/, value: 1 },
         { test: /class="([^\"]*\b|)((uname|usr)\b)/, value: 1 },
-        { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 }
+        { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 },
+        { test: /formcontrolname="[^\"]*user/i, value: 1 }
     ],
     password: [
         { test: /type="password"/, value: 10 },
