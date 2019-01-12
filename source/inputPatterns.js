@@ -36,7 +36,7 @@ export const SUBMIT_BUTTON_QUERIES = [
 const USERNAMES_OPTIONAL_TEXT = [
     "input[id^=user]",
     "input[id^=usr]",
-    "input[name^=user]",
+    "input[name^=user i]",
     "input[id*=username i]",
     "input[id*=accountname i]",
     "input[title*=username i]",
@@ -47,7 +47,7 @@ const USERNAMES_OPTIONAL_TEXT = [
     "input[name*=login i]",
     "input[id*=email i]",
     "input[id*=login i]",
-    "input[formcontrolname*=user]",
+    "input[formcontrolname*=user i]",
     "input[class*=user i]"
 ].reduce(
     (queries, next) => [

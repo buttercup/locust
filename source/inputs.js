@@ -33,7 +33,9 @@ const FORM_ELEMENT_SCORING = {
     submit: [
         { test: /type="submit"/, value: 5 },
         { test: /(name|id|title)="(login|log[ _-]in|signin|sign[ _-]in)"/i, value: 10 },
-        { test: /data-bcup-haslogintext="yes"/, value: 8 }
+        { test: /<input.+data-bcup-haslogintext="yes"/, value: 8 },
+        { test: /<button.+data-bcup-haslogintext="yes"/, value: 8 },
+        { test: /<a .*data-bcup-haslogintext="yes"/, value: 2 }
     ]
 };
 const VISIBILE_SCORE_INCREMENT = 8;
