@@ -7,9 +7,11 @@ const REGULAR_BUTTONS = ["button", "a"];
 export function revealShySubmitButtons(queryEl = document) {
     const query = [...SUBMIT_BUTTON_QUERIES, ...REGULAR_BUTTONS].join(",");
     const buttons = Array.prototype.slice.call(queryEl.querySelectorAll(query));
-    buttons.filter(button => button.hasAttribute(LOGIN_BUTTON_ATTR) === false).forEach(button => {
-        const text = button.innerText.trim().toLowerCase();
-        const hasLoginText = LOGIN_TEXT_REXP.test(text);
-        button.setAttribute(LOGIN_BUTTON_ATTR, hasLoginText ? "yes" : "no");
-    });
+    buttons
+        .filter(button => button.hasAttribute(LOGIN_BUTTON_ATTR) === false)
+        .forEach(button => {
+            const text = button.innerText.trim().toLowerCase();
+            const hasLoginText = LOGIN_TEXT_REXP.test(text);
+            button.setAttribute(LOGIN_BUTTON_ATTR, hasLoginText ? "yes" : "no");
+        });
 }
