@@ -180,7 +180,7 @@ better.
 
 <a name="LoginTarget._waitForNoUnload"></a>
 
-### LoginTarget._waitForNoUnload() ⇒ <code>Promise</code>
+### LoginTarget.\_waitForNoUnload() ⇒ <code>Promise</code>
 Wait for either the unload event to fire or the delay to
 time out
 
@@ -190,7 +190,7 @@ expired for the page has begun unloading.
 **Access**: protected  
 <a name="_listenForUpdates"></a>
 
-## _listenForUpdates(type, input)
+## \_listenForUpdates(type, input)
 Attach an event listener to listen for input changes
 Attaches listeners for username/password input changes and emits an event
 when a change is detected.
