@@ -72,3 +72,9 @@ target.once("formSubmitted", ({ source }) => {
     // `source` will either be "submitButton" or "form"
 });
 ```
+
+## Development
+
+You can run `npm run dev` to generate and watch-files to develop Locust. To create a script that outputs dev information, run `npm run dev:inject` and inject the provided script snippet into pages to test Locust. It won't work all of the time if the Buttercup browser extension is running, nor will it work in consecutive executions.
+
+To run on HTTPS pages consider using a Chrome extension like [Disable Content Security Policy](https://chrome.google.com/webstore/detail/disable-content-security/ieelmcmcagommplceebfedjlakkhpden?hl=en), which will allow injection of local scripts.
