@@ -1,0 +1,22 @@
+name: Node.js tests
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        ci-test: ["general", "integration"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build w/ Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - name: Test (${{ matrix.ci-test }})
+        uses: GabrielBB/xvfb-action@v1.0
+        with:
+          run: npm test:ci:${{ matrix.ci-test }}
