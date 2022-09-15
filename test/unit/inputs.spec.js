@@ -23,7 +23,9 @@ describe("inputs", function() {
 
         it("fetches elements under form", function() {
             const fakeForm = {
-                querySelectorAll: sinon.stub().returns([])
+                elements: [],
+                querySelectorAll: sinon.stub().returns([]),
+                tagName: "form"
             };
             this.forms.push(fakeForm);
             fetchFormsWithInputs(this.queryEl);
@@ -32,12 +34,14 @@ describe("inputs", function() {
 
         it("filters forms without password fields", function() {
             const fakeForm = {
+                elements: [],
                 querySelectorAll: sinon.stub().callsFake(function(query) {
                     if (/username/.test(query)) {
                         return {};
                     }
                     return [];
-                })
+                }),
+                tagName: "form"
             };
             this.forms.push(fakeForm);
             const forms = fetchFormsWithInputs(this.queryEl);

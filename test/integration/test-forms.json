@@ -42,8 +42,15 @@
         "name": "New Relic",
         "url": "https://rpm.newrelic.com/",
         "expectedFields": {
-            "username": "#login_email",
-            "password": "#login_password"
+            "username": "#login_email"
+        }
+    },
+    {
+        "name": "giffgaff",
+        "url": "https://www.giffgaff.com/auth/login",
+        "expectedFields": {
+            "username": "#memberName",
+            "password": "#password"
         }
     }
 ]

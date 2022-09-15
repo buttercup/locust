@@ -48,12 +48,21 @@ function fetchForms(queryEl = document) {
 
 export function fetchFormsWithInputs(queryEl = document) {
     return fetchForms(queryEl)
-        .map(formEl => ({
-            form: formEl,
-            usernameFields: fetchUsernameInputs(formEl),
-            passwordFields: fetchPasswordInputs(formEl),
-            submitButtons: fetchSubmitButtons(formEl)
-        }))
+        .map(formEl => {
+            const form = {
+                form: formEl,
+                usernameFields: fetchUsernameInputs(formEl),
+                passwordFields: fetchPasswordInputs(formEl),
+                submitButtons: fetchSubmitButtons(formEl)
+            };
+            if (form.usernameFields.length <= 0) {
+                const input = guessUsernameInput(formEl);
+                if (input) {
+                    form.usernameFields.push(input);
+                }
+            }
+            return form;
+        })
         .filter(form => form.passwordFields.length + form.usernameFields.length > 0);
 }
 
@@ -73,6 +82,21 @@ function fetchUsernameInputs(queryEl = document) {
     const megaQuery = USERNAME_QUERIES.join(", ");
     const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
     return sortFormElements(inputs, "username");
+}
+
+function guessUsernameInput(formEl) {
+    const elements = /^form$/i.test(formEl.tagName)
+        ? [...formEl.elements]
+        : [...formEl.querySelectorAll("input")];
+    const possibleInputs = elements.filter(el => {
+        if (el.tagName.toLowerCase() !== "input") return false;
+        if (["email", "text"].indexOf(el.getAttribute("type")) === -1) return false;
+        if (/pass(word)?/.test(el.outerHTML)) return false;
+        return true;
+    });
+    return possibleInputs.length > 0
+        ? possibleInputs[0]
+        : null;
 }
 
 export function setInputValue(input, value) {
