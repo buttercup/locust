@@ -33,7 +33,7 @@ function testConfiguration(config, nightmare) {
         .inject("js", LOCUST_PATH)
         .wait(waitForUsernameQuery)
         .wait(waitForPasswordQuery)
-        .evaluate(function(expectedFields) {
+        .evaluate(function (expectedFields) {
             if (!window.Locust) {
                 throw new Error("No global Locust variable found");
             }
@@ -44,13 +44,17 @@ function testConfiguration(config, nightmare) {
             if (expectedFields && expectedFields.username) {
                 const usernameField = document.querySelector(expectedFields.username);
                 if (target.usernameField !== usernameField) {
-                    throw new Error(`No username field found matching query: ${expectedFields.username}`);
+                    throw new Error(
+                        `No username field found matching query: ${expectedFields.username}`
+                    );
                 }
             }
             if (expectedFields && expectedFields.password) {
                 const passwordField = document.querySelector(expectedFields.password);
                 if (target.passwordField !== passwordField) {
-                    throw new Error(`No password field found matching query: ${expectedFields.password}`);
+                    throw new Error(
+                        `No password field found matching query: ${expectedFields.password}`
+                    );
                 }
             }
         }, expectedFields);
@@ -59,14 +63,14 @@ function testConfiguration(config, nightmare) {
 console.log("Running integration tests:");
 let work = Promise.resolve();
 const nightmare = initialiseNightmare();
-TESTS.forEach(test => {
+TESTS.forEach((test) => {
     work = work.then(() => testConfiguration(test, nightmare));
 });
 work.then(() => nightmare.end())
     .then(() => {
         console.log("Tests complete.");
     })
-    .catch(err => {
+    .catch((err) => {
         console.error(err);
         process.exit(1);
     });

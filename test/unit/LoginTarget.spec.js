@@ -1,27 +1,21 @@
 import LoginTarget from "../../source/LoginTarget.js";
 import { setInputValue } from "../../source/inputs.js";
 
-describe("LoginTarget", function() {
-    beforeEach(function() {
+describe("LoginTarget", function () {
+    beforeEach(function () {
         this.target = new LoginTarget();
     });
 
-    it("implements event emitter methods", function() {
-        expect(this.target)
-            .to.have.property("emit")
-            .that.is.a("function");
-        expect(this.target)
-            .to.have.property("on")
-            .that.is.a("function");
-        expect(this.target)
-            .to.have.property("once")
-            .that.is.a("function");
+    it("implements event emitter methods", function () {
+        expect(this.target).to.have.property("emit").that.is.a("function");
+        expect(this.target).to.have.property("on").that.is.a("function");
+        expect(this.target).to.have.property("once").that.is.a("function");
     });
 
-    it("fires events when username inputs are updated", function() {
+    it("fires events when username inputs are updated", function () {
         let currentValue = "";
         this.target.usernameField = document.createElement("input");
-        this.target.on("valueChanged", info => {
+        this.target.on("valueChanged", (info) => {
             if (info.type === "username") {
                 currentValue = info.value;
             }
@@ -30,9 +24,9 @@ describe("LoginTarget", function() {
         expect(currentValue).to.equal("user5644");
     });
 
-    it("fires events when the submit button is clicked", function() {
+    it("fires events when the submit button is clicked", function () {
         let formSubmitted = 0;
-        this.target.on("formSubmitted", info => {
+        this.target.on("formSubmitted", (info) => {
             if (info.source === "submitButton") {
                 formSubmitted += 1;
             }
@@ -43,9 +37,9 @@ describe("LoginTarget", function() {
         expect(formSubmitted).to.equal(1);
     });
 
-    it("fires events when the form is submitted", function() {
+    it("fires events when the form is submitted", function () {
         let formSubmitted = 0;
-        this.target.on("formSubmitted", info => {
+        this.target.on("formSubmitted", (info) => {
             if (info.source === "form") {
                 formSubmitted += 1;
             }
@@ -62,10 +56,10 @@ describe("LoginTarget", function() {
         expect(formSubmitted).to.equal(1);
     });
 
-    it("fires events when password inputs are updated", function() {
+    it("fires events when password inputs are updated", function () {
         let currentValue = "";
         this.target.passwordField = document.createElement("input");
-        this.target.on("valueChanged", info => {
+        this.target.on("valueChanged", (info) => {
             if (info.type === "password") {
                 currentValue = info.value;
             }
@@ -74,22 +68,22 @@ describe("LoginTarget", function() {
         expect(currentValue).to.equal("pass!3233 5");
     });
 
-    describe("calculateScore", function() {
-        it("returns 0 if no items are set", function() {
+    describe("calculateScore", function () {
+        it("returns 0 if no items are set", function () {
             expect(this.target.calculateScore()).to.equal(0);
         });
 
-        it("returns a higher score if a username field exists", function() {
+        it("returns a higher score if a username field exists", function () {
             this.target.usernameField = document.createElement("input");
             expect(this.target.calculateScore()).to.be.above(0);
         });
 
-        it("returns a higher score if a password field exists", function() {
+        it("returns a higher score if a password field exists", function () {
             this.target.passwordField = document.createElement("input");
             expect(this.target.calculateScore()).to.be.above(0);
         });
 
-        it("returns a higher score if both inputs exist", function() {
+        it("returns a higher score if both inputs exist", function () {
             this.target.passwordField = document.createElement("input");
             const singleFieldScore = this.target.calculateScore();
             this.target.usernameField = document.createElement("input");
@@ -97,47 +91,47 @@ describe("LoginTarget", function() {
         });
     });
 
-    describe("enterDetails", function() {
-        beforeEach(function() {
+    describe("enterDetails", function () {
+        beforeEach(function () {
             this.target.usernameField = this.username = document.createElement("input");
             this.target.passwordField = this.password = document.createElement("input");
         });
 
-        it("sets the values of the inputs", function() {
+        it("sets the values of the inputs", function () {
             this.target.enterDetails("myUsername", "myPassword");
             expect(this.username.value).to.equal("myUsername");
             expect(this.password.value).to.equal("myPassword");
         });
     });
 
-    describe("login", function() {
-        beforeEach(function() {
+    describe("login", function () {
+        beforeEach(function () {
             this.target.usernameField = this.username = document.createElement("input");
             this.target.passwordField = this.password = document.createElement("input");
             sinon.stub(this.target, "submit");
         });
 
-        it("sets the values of the inputs", function() {
+        it("sets the values of the inputs", function () {
             return this.target.login("myUsername", "myPassword").then(() => {
                 expect(this.username.value).to.equal("myUsername");
                 expect(this.password.value).to.equal("myPassword");
             });
         });
 
-        it("submits the form", function() {
+        it("submits the form", function () {
             return this.target.login("myUsername", "myPassword").then(() => {
                 expect(this.target.submit.calledOnce).to.be.true;
             });
         });
     });
 
-    describe("submit", function() {
-        beforeEach(function() {
+    describe("submit", function () {
+        beforeEach(function () {
             this.target.submitButton = this.submitButton = document.createElement("input");
             sinon.stub(this.submitButton, "click");
         });
 
-        it("clicks the submit button", function() {
+        it("clicks the submit button", function () {
             return this.target.submit().then(() => {
                 expect(this.submitButton.click.calledOnce).to.be.true;
             });
