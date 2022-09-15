@@ -19,4 +19,4 @@ jobs:
       - name: Test (${{ matrix.ci-test }})
         uses: GabrielBB/xvfb-action@v1.0
         with:
-          run: npm test:ci:${{ matrix.ci-test }}
+          run: npm run test:ci:${{ matrix.ci-test }}
