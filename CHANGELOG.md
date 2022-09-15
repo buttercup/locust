@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v1.0.0
+_2022-09-15_
+
+ * Username detection improvements (last-resort strategy)
+ * Build toolchain update
+
 ## v0.10.0
 _2019-01-12_
 
