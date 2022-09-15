@@ -249,14 +249,14 @@ export default class LoginTarget extends EventEmitter {
             const source = type === "form" ? "form" : "submitButton";
             handleEvent = () => this.emit("formSubmitted", { source });
         } else {
-            const emit = value => {
+            const emit = (value) => {
                 this.emit("valueChanged", {
                     type,
                     value
                 });
             };
             // Listener function for the input element
-            handleEvent = function() {
+            handleEvent = function () {
                 emit(this.value);
             };
         }
@@ -280,12 +280,12 @@ export default class LoginTarget extends EventEmitter {
     _waitForNoUnload() {
         const unloadObserver = getUnloadObserver();
         return Promise.race([
-            new Promise(resolve => {
+            new Promise((resolve) => {
                 setTimeout(() => {
                     resolve(false);
                 }, this.forceSubmitDelay);
             }),
-            new Promise(resolve => {
+            new Promise((resolve) => {
                 if (unloadObserver.willUnload) {
                     return resolve(true);
                 }
@@ -293,7 +293,7 @@ export default class LoginTarget extends EventEmitter {
                     resolve(true);
                 });
             })
-        ]).then(hasUnloaded => {
+        ]).then((hasUnloaded) => {
             if (!hasUnloaded) {
                 // No unload events detected, so we need for force submit
                 this.form.submit();

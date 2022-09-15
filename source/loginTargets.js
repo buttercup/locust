@@ -13,7 +13,7 @@ export function getLoginTarget(queryEl = document) {
     const targets = getLoginTargets(queryEl);
     let bestScore = -1,
         bestTarget = null;
-    targets.forEach(target => {
+    targets.forEach((target) => {
         const score = target.calculateScore();
         if (score > bestScore) {
             bestScore = score;
@@ -33,7 +33,7 @@ export function getLoginTarget(queryEl = document) {
  */
 export function getLoginTargets(queryEl = document) {
     revealShySubmitButtons(queryEl);
-    return fetchFormsWithInputs(queryEl).map(info => {
+    return fetchFormsWithInputs(queryEl).map((info) => {
         const { form, usernameFields, passwordFields, submitButtons } = info;
         const target = new LoginTarget();
         target.usernameField = usernameFields[0];

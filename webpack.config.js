@@ -1,5 +1,5 @@
 const path = require("path");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
@@ -16,6 +16,8 @@ if (INJECT_MODE) {
 
 const config = {
     entry: path.join(INJECT_MODE ? DEV_SRC : SOURCE, "./index.js"),
+
+    mode: "development",
 
     output: {
         filename: "locust.js",
@@ -40,13 +42,22 @@ module.exports =
         ? [
               config,
               Object.assign({}, config, {
+                  mode: "production",
+                  optimization: {
+                      minimize: true,
+                      minimizer: [
+                          new TerserPlugin({
+                              exclude: /\/node_modules/,
+                              parallel: true
+                          })
+                      ]
+                  },
                   output: {
                       filename: "locust.min.js",
                       path: DIST,
                       library: "Locust",
                       libraryTarget: "umd"
-                  },
-                  plugins: [new UglifyJSPlugin()]
+                  }
               })
           ]
         : [config];
