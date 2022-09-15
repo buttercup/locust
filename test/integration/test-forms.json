@@ -1,10 +1,10 @@
 [
     {
-        "name": "Outlook",
-        "url": "https://outlook.live.com/owa/?authRedirect=true&nlp=1",
+        "name": "DigitalOcean",
+        "url": "https://cloud.digitalocean.com/login",
         "expectedFields": {
-            "username": "input[type=email][name=loginfmt]",
-            "password": "input[type=password][name=passwd]"
+            "username": "input#email",
+            "password": "input#password"
         }
     },
     {

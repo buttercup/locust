@@ -85,18 +85,14 @@ function fetchUsernameInputs(queryEl = document) {
 }
 
 function guessUsernameInput(formEl) {
-    const elements = /^form$/i.test(formEl.tagName)
-        ? [...formEl.elements]
-        : [...formEl.querySelectorAll("input")];
+    const elements = /^form$/i.test(formEl.tagName) ? [...formEl.elements] : [...formEl.querySelectorAll("input")];
     const possibleInputs = elements.filter(el => {
         if (el.tagName.toLowerCase() !== "input") return false;
         if (["email", "text"].indexOf(el.getAttribute("type")) === -1) return false;
         if (/pass(word)?/.test(el.outerHTML)) return false;
         return true;
     });
-    return possibleInputs.length > 0
-        ? possibleInputs[0]
-        : null;
+    return possibleInputs.length > 0 ? possibleInputs[0] : null;
 }
 
 export function setInputValue(input, value) {
