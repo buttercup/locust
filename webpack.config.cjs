@@ -16,15 +16,13 @@ if (INJECT_MODE) {
 }
 
 const generateConfig = () => ({
-    entry: path.join(INJECT_MODE ? DEV_SRC : SOURCE, "./index.js"),
+    entry: path.join(INJECT_MODE ? DEV_SRC : SOURCE, "./index.ts"),
 
     experiments: {
         outputModule: true
     },
 
     externalsType: "module",
-
-    mode: "development",
 
     output: {
         filename: "index.js",
@@ -41,8 +39,23 @@ const generateConfig = () => ({
         rules: [
             {
                 test: /\.ts$/,
-                use: "ts-loader",
+                use: {
+                    loader: "ts-loader",
+                    options: {
+                        onlyCompileBundledFiles: true
+                    }
+                },
                 exclude: /node_modules/,
+                resolve: {
+                    fullySpecified: false
+                }
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                },
                 resolve: {
                     fullySpecified: false
                 }
@@ -53,6 +66,7 @@ const generateConfig = () => ({
     resolve: {
         extensions: [".ts", ".js"],
         fallback: {
+            crypto: false,
             fs: false,
             net: false
         },
@@ -66,29 +80,29 @@ const generateConfig = () => ({
 });
 
 module.exports =
-    process.env.NODE_ENV === "production"
-        ? [
-              Object.assign({}, generateConfig(), {
-                  mode: "production",
-                  optimization: {
-                      minimize: true,
-                      minimizer: [
-                          new TerserPlugin({
-                              exclude: /\/node_modules/,
-                              parallel: true
-                          })
-                      ]
-                  },
-                  output: {
-                      filename: "index.js",
-                      path: DIST,
-                      library: {
-                        type: "module"
-                      },
-                      environment: {
-                        module: true
-                      }
-                  }
-              })
-          ]
-        : [config];
+    process.env.NODE_ENV === "production" ?
+    [
+        Object.assign({}, generateConfig(), {
+            optimization: {
+                minimize: true,
+                minimizer: [
+                    new TerserPlugin({
+                        exclude: /\/node_modules/,
+                        parallel: true
+                    })
+                ]
+            },
+
+            output: {
+                filename: "index.js",
+                path: DIST,
+                library: {
+                    type: "module"
+                },
+                environment: {
+                    module: true
+                }
+            }
+        })
+    ] :
+    [generateConfig()];

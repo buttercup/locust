@@ -1,4 +1,4 @@
-import LoginTarget from "../../source/LoginTarget.js";
+import { LoginTarget } from "../../source/LoginTarget.js";
 import { setInputValue } from "../../source/inputs.js";
 
 describe("LoginTarget", function () {

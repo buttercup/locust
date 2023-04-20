@@ -4,4 +4,5 @@ import { getSharedObserver } from "./UnloadObserver.js";
 getSharedObserver();
 
 export { getLoginTarget, getLoginTargets } from "./loginTargets.js";
+export { LoginTarget } from "./LoginTarget.js";
 export * from "./types.js";
