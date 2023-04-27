@@ -1,5 +1,7 @@
-import { LoginTarget } from "../../source/LoginTarget.js";
-import { setInputValue } from "../../source/inputs.js";
+const { expect } = require("chai");
+const sinon = require("sinon");
+const { LoginTarget } = require("../dist/LoginTarget.js");
+const { setInputValue } = require("../dist/inputs.js");
 
 describe("LoginTarget", function () {
     beforeEach(function () {

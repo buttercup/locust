@@ -1,5 +1,7 @@
-import { fetchFormsWithInputs, setInputValue, sortFormElements } from "../../source/inputs.js";
-import { FORM_QUERIES } from "../../source/inputPatterns.js";
+const { expect } = require("chai");
+const sinon = require("sinon");
+const { fetchFormsWithInputs, setInputValue, sortFormElements } = require("../dist/inputs.js");
+const { FORM_QUERIES } = require("../dist/inputPatterns.js");
 
 describe("inputs", function () {
     describe("fetchFormsWithInputs", function () {
