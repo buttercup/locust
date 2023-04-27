@@ -1,10 +1,9 @@
 [
     {
-        "name": "DigitalOcean",
-        "url": "https://cloud.digitalocean.com/login",
+        "name": "Outlook",
+        "url": "https://login.live.com/login.srf",
         "expectedFields": {
-            "username": "input#email",
-            "password": "input#password"
+            "username": "input[type=email][name=loginfmt]"
         }
     },
     {
@@ -15,6 +14,15 @@
             "password": "input#password"
         }
     },
+    {
+        "name": "DigitalOcean",
+        "url": "https://cloud.digitalocean.com/login",
+        "expectedFields": {
+            "username": "input#email",
+            "password": "input#password"
+        }
+    },
+    
     {
         "name": "DynDNS",
         "url": "https://account.dyn.com/entrance/",
@@ -43,14 +51,6 @@
         "url": "https://rpm.newrelic.com/",
         "expectedFields": {
             "username": "#login_email"
-        }
-    },
-    {
-        "name": "giffgaff",
-        "url": "https://www.giffgaff.com/auth/login",
-        "expectedFields": {
-            "username": "#memberName",
-            "password": "#password"
         }
     }
 ]

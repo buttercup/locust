@@ -1,5 +1,4 @@
 const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin");
 const ResolveTypeScriptPlugin = require("resolve-typescript-plugin");
 
 const DIST = path.resolve(__dirname, "./dist");
@@ -8,13 +7,19 @@ const DEV_SRC = path.resolve(__dirname, "./dev");
 const INJECT_MODE = process.env.INJECT === "yes";
 
 module.exports = {
+    devtool: false,
+
     entry: path.join(INJECT_MODE ? DEV_SRC : SOURCE, "./index.ts"),
 
     mode: "development",
 
     output: {
         filename: "index.js",
-        path: DIST
+        path: DIST,
+        library: {
+            name: "Locust",
+            type: "umd"
+        }
     },
 
     module: {

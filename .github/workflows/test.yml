@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-        ci-test: ["general", "integration"]
+        ci-test: ["web", "integration"]
     steps:
       - uses: actions/checkout@v2
       - name: Build w/ Node ${{ matrix.node-version }}
@@ -20,3 +20,16 @@ jobs:
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: npm run test:ci:${{ matrix.ci-test }}
+  format:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Formatting tests ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run test:format
