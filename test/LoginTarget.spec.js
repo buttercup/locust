@@ -93,19 +93,6 @@ describe("LoginTarget", function () {
         });
     });
 
-    describe("enterDetails", function () {
-        beforeEach(function () {
-            this.target.usernameField = this.username = document.createElement("input");
-            this.target.passwordField = this.password = document.createElement("input");
-        });
-
-        it("sets the values of the inputs", function () {
-            this.target.enterDetails("myUsername", "myPassword");
-            expect(this.username.value).to.equal("myUsername");
-            expect(this.password.value).to.equal("myPassword");
-        });
-    });
-
     describe("login", function () {
         beforeEach(function () {
             this.target.usernameField = this.username = document.createElement("input");

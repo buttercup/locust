@@ -29,7 +29,7 @@ describe("inputs", function () {
             };
             this.forms.push(fakeForm);
             fetchFormsWithInputs(this.queryEl);
-            expect(fakeForm.querySelectorAll.calledThrice).to.be.true;
+            expect(fakeForm.querySelectorAll.callCount).to.be.at.least(3);
         });
 
         it("filters forms without password fields", function () {

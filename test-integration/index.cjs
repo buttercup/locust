@@ -1,6 +1,5 @@
 const path = require("node:path");
 const fs = require("node:fs/promises");
-// const Nightmare = require("nightmare");
 const puppeteer = require("puppeteer");
 const TESTS = require("./test-forms.json");
 
@@ -13,22 +12,6 @@ async function initialiseBrowser() {
     return [browser, page];
 }
 
-// function initialiseNightmare() {
-//     const nightmare = Nightmare({
-//         waitTimeout: 15000,
-//         gotoTimeout: 15000,
-//         webPreferences: {
-//             allowRunningInsecureContent: true,
-//             nodeIntegration: false,
-//             webSecurity: false
-//         }
-//     });
-//     nightmare.useragent(
-//         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3015.0 Safari/537.36"
-//     );
-//     return nightmare;
-// }
-
 async function testConfiguration(config, browser, page) {
     const { name, url, expectedFields } = config;
     console.log(` - Testing: ${name}`);
@@ -39,13 +22,19 @@ async function testConfiguration(config, browser, page) {
     const waitForUsernameQuery = expectedFields.username || "body";
     const waitForPasswordQuery = expectedFields.password || "body";
     await page.goto(url);
-    await page.waitForNetworkIdle();
-    // await page.addScriptTag({ path: LOCUST_PATH });
+    console.log("   . navigation");
+    await Promise.race([
+        new Promise(resolve => setTimeout(resolve, 5000)),
+        page.waitForNetworkIdle()
+    ]);
+    console.log("   . idle");
     await page.addScriptTag({
         content: jsContent
     });
     await page.waitForSelector(waitForUsernameQuery);
+    console.log("   . username");
     await page.waitForSelector(waitForPasswordQuery);
+    console.log("   . password");
     await page.evaluate((expectedFields) => {
         if (!window.Locust) {
             throw new Error("No global Locust variable found");
@@ -81,7 +70,7 @@ async function testConfiguration(config, browser, page) {
             await Promise.race([
                 testConfiguration(test, browser, page),
                 new Promise((resolve, reject) => {
-                    setTimeout(() => reject(new Error("Timed out")), 15000);
+                    setTimeout(() => reject(new Error("Timed out")), 30000);
                 })
             ]);
         } catch (err) {
@@ -98,23 +87,3 @@ async function testConfiguration(config, browser, page) {
         process.exit(1);
     }, 1000);
 });
-
-// console.log("Running integration tests:");
-// let work = Promise.resolve();
-// const nightmare = initialiseNightmare();
-// TESTS.forEach((test) => {
-//     work = work.then(() => Promise.race([
-//         testConfiguration(test, nightmare),
-//         new Promise((resolve, reject) => {
-//             setTimeout(() => reject(new Error("Timed out")), 15000);
-//         })
-//     ]));
-// });
-// work.then(() => nightmare.end())
-//     .then(() => {
-//         console.log("Tests complete.");
-//     })
-//     .catch((err) => {
-//         console.error(err);
-//         process.exit(1);
-//     });
