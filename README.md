@@ -28,7 +28,7 @@ Or embed it in a webpage and access it via `window.Locust`.
 
 Locust exports a couple of useful methods, but the one which provides the most simple approach to logging in is `getLoginTarget`:
 
-```javascript
+```typescript
 const { getLoginTarget } = Locust;
 
 getLoginTarget().login("myUsername", "myPassword");
@@ -40,8 +40,16 @@ _To find all forms on a page, use the `getLoginTargets` method instead, which re
 
 In the case that you don't want to automatically log in, but still enter the details, you can use the following example:
 
-```javascript
-getLoginTarget().enterDetails("myUsername", "myPassword");
+```typescript
+const target = getLoginTarget();
+await target.fillUsername("myUsername");
+await target.fillPassword("myPassword");
+```
+
+You can fill in OTPs using the following:
+
+```typescript
+await target.fillOTP("123456");
 ```
 
 _**Note** that `getLoginTarget` may return `null` if no form is found, so you should check for this eventuality._
@@ -52,7 +60,7 @@ You can also read the [API documentation](https://github.com/buttercup/locust/bl
 
 Locust login targets will emit events when certain things happen. To listen for changes to the values of usernames and passwords on forms simply attach event listeners:
 
-```javascript
+```typescript
 const target = getLoginTarget();
 target.on("valueChanged", info => {
     if (info.type === "username") {
