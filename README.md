@@ -10,11 +10,9 @@ Locust helps find **login forms** by searching the DOM for common login form ele
 
 ## Installation
 
-Run `npm install @buttercup/locust --save-dev` to install as a dev dependency in a Node JS project.
+Run `npm install @buttercup/locust --save-dev` to install as a dev dependency - as it's designed to be included in a build system, such as with Webpack, it does not need to be a normal dependency.
 
-The npm published version of this libary contains both the minified and unminified sources which can be used directly: `dist/locust.js` and `dist/locust.min.js`.
-
-_When requiring this library directly via `@buttercup/locust`, the minified version provided._
+Types are included.
 
 ## Usage
 
