@@ -1,6 +1,6 @@
 {
   "name": "@buttercup/locust",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Locust Login Toolkit",
   "exports": "./dist/index.js",
   "type": "module",
