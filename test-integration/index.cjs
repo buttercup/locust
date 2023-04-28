@@ -67,18 +67,21 @@ async function testConfiguration(config, browser, page) {
     const [browser, page] = await initialiseBrowser();
     for (const test of TESTS) {
         try {
+            let timeout;
             await Promise.race([
                 testConfiguration(test, browser, page),
                 new Promise((resolve, reject) => {
-                    setTimeout(() => reject(new Error("Timed out")), 30000);
+                    timeout = setTimeout(() => reject(new Error("Timed out")), 30000);
                 })
             ]);
+            clearTimeout(timeout);
         } catch (err) {
             await browser.close();
             throw err;
         }
     }
     console.log("Tests complete.");
+    await page.close();
     await browser.close();
 })()
 .catch(err => {
