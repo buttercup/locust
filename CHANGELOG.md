@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v2.0.2
+_2023-04-28_
+
+ * **Bugfix**:
+   * OTP fields prioritised lower than username fields
+
 ## v2.0.1
 _2023-04-28_
 
