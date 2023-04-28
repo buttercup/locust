@@ -1,5 +1,14 @@
 # Locust Changelog
 
+## v2.0.0
+_2023-04-28_
+
+ * Typescript
+ * OTP support
+ * **Breaking changes**:
+   * ESM
+   * `LoginTarget#enterDetails` removed
+
 ## v1.0.0
 _2022-09-15_
 
