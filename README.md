@@ -23,7 +23,7 @@ Locust is an ESM-only library, so you must include it in another project and use
 Locust exports a couple of useful methods, but the one which provides the most simple approach to logging in is `getLoginTarget`:
 
 ```typescript
-const { getLoginTarget } = Locust;
+import { getLoginTarget } from "@buttercup/locust";
 
 getLoginTarget().login("myUsername", "myPassword");
 ```
