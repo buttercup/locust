@@ -1,11 +1,16 @@
 import EventEmitter from "eventemitter3";
 
-let __sharedInstance;
+interface UnloadObserverEvents {
+    unloading: () => void;
+}
 
-export default class UnloadObserver extends EventEmitter {
+let __sharedInstance: UnloadObserver | null;
+
+export default class UnloadObserver extends EventEmitter<UnloadObserverEvents> {
+    protected _willUnload: boolean = false;
+
     constructor() {
         super();
-        this._willUnload = false;
         window.addEventListener("beforeunload", () => {
             this._willUnload = true;
             this.emit("unloading");
@@ -17,7 +22,7 @@ export default class UnloadObserver extends EventEmitter {
     }
 }
 
-export function getSharedObserver() {
+export function getSharedObserver(): UnloadObserver {
     if (!__sharedInstance) {
         __sharedInstance = new UnloadObserver();
     }

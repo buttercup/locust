@@ -3,6 +3,18 @@
 
 export const FORM_QUERIES = ["form", "div.login", "div.signin"];
 
+export const OTP_QUERIES = [
+    "input[autocomplete=one-time-code]",
+    "input[id^=mfa]",
+    "input[id^=otp]",
+    "input[id$=otp]",
+    "input[name^=mfa]",
+    "[id*=otp] input[inputmode=numeric]",
+    "[id*=mfa] input[inputmode=numeric]",
+    "[name*=otp] input[inputmode=numeric]",
+    "[name*=mfa] input[inputmode=numeric]"
+];
+
 export const PASSWORD_QUERIES = [
     "input[type=password]",
     "input[name^=pass]",

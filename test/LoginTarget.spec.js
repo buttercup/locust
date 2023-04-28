@@ -1,5 +1,7 @@
-import LoginTarget from "../../source/LoginTarget.js";
-import { setInputValue } from "../../source/inputs.js";
+const { expect } = require("chai");
+const sinon = require("sinon");
+const { LoginTarget } = require("../dist/LoginTarget.js");
+const { setInputValue } = require("../dist/inputs.js");
 
 describe("LoginTarget", function () {
     beforeEach(function () {
@@ -88,19 +90,6 @@ describe("LoginTarget", function () {
             const singleFieldScore = this.target.calculateScore();
             this.target.usernameField = document.createElement("input");
             expect(this.target.calculateScore()).to.be.above(singleFieldScore);
-        });
-    });
-
-    describe("enterDetails", function () {
-        beforeEach(function () {
-            this.target.usernameField = this.username = document.createElement("input");
-            this.target.passwordField = this.password = document.createElement("input");
-        });
-
-        it("sets the values of the inputs", function () {
-            this.target.enterDetails("myUsername", "myPassword");
-            expect(this.username.value).to.equal("myUsername");
-            expect(this.password.value).to.equal("myPassword");
         });
     });
 

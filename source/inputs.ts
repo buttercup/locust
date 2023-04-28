@@ -1,10 +1,19 @@
 import isVisible from "is-visible";
 import {
     FORM_QUERIES,
+    OTP_QUERIES,
     PASSWORD_QUERIES,
     SUBMIT_BUTTON_QUERIES,
     USERNAME_QUERIES
 } from "./inputPatterns.js";
+
+export interface FetchedForm {
+    form: HTMLFormElement;
+    usernameFields: Array<HTMLInputElement>;
+    otpFields: Array<HTMLInputElement>;
+    passwordFields: Array<HTMLInputElement>;
+    submitButtons: Array<HTMLElement>;
+}
 
 const FORM_ELEMENT_SCORING = {
     username: [
@@ -26,6 +35,16 @@ const FORM_ELEMENT_SCORING = {
         { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 },
         { test: /formcontrolname="[^\"]*user/i, value: 1 }
     ],
+    otp: [
+        { test: /autocomplete=\"?one-time-code\"?/, value: 10 },
+        { test: /id="otp"/, value: 9 },
+        { test: /id="mfa"/, value: 9 },
+        { test: /id="otp/, value: 7 },
+        { test: /id="mfa/, value: 6 },
+        { test: /id="[^"]+otp"/, value: 5 },
+        { test: /id="[^"]+mfa"/, value: 4 },
+        { test: /inputmode="numeric"/, value: 3 }
+    ],
     password: [
         { test: /type="password"/, value: 10 },
         { test: /name="pass/, value: 8 },
@@ -45,22 +64,25 @@ const FORM_ELEMENT_SCORING = {
 };
 const VISIBILE_SCORE_INCREMENT = 8;
 
+type FormElementScoringType = keyof typeof FORM_ELEMENT_SCORING;
+
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
     window.HTMLInputElement.prototype,
     "value"
 ).set;
 
-function fetchForms(queryEl = document) {
+function fetchForms(queryEl: Document | HTMLElement = document): Array<HTMLFormElement> {
     return Array.prototype.slice.call(queryEl.querySelectorAll(FORM_QUERIES.join(",")));
 }
 
-export function fetchFormsWithInputs(queryEl = document) {
+export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document) {
     return fetchForms(queryEl)
         .map((formEl) => {
-            const form = {
+            const form: FetchedForm = {
                 form: formEl,
                 usernameFields: fetchUsernameInputs(formEl),
                 passwordFields: fetchPasswordInputs(formEl),
+                otpFields: fetchOTPInputs(formEl),
                 submitButtons: fetchSubmitButtons(formEl)
             };
             if (form.usernameFields.length <= 0) {
@@ -74,25 +96,31 @@ export function fetchFormsWithInputs(queryEl = document) {
         .filter((form) => form.passwordFields.length + form.usernameFields.length > 0);
 }
 
-function fetchPasswordInputs(queryEl = document) {
+function fetchOTPInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
+    const megaQuery = OTP_QUERIES.join(", ");
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    return sortFormElements(inputs, "otp");
+}
+
+function fetchPasswordInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
     const megaQuery = PASSWORD_QUERIES.join(", ");
-    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
     return sortFormElements(inputs, "password");
 }
 
-function fetchSubmitButtons(queryEl = document) {
+function fetchSubmitButtons(queryEl: Document | HTMLElement = document) {
     const megaQuery = SUBMIT_BUTTON_QUERIES.join(", ");
     const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
     return sortFormElements(inputs, "submit");
 }
 
-function fetchUsernameInputs(queryEl = document) {
+function fetchUsernameInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
     const megaQuery = USERNAME_QUERIES.join(", ");
-    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
     return sortFormElements(inputs, "username");
 }
 
-function guessUsernameInput(formEl) {
+function guessUsernameInput(formEl: HTMLFormElement): HTMLInputElement | null {
     const elements = /^form$/i.test(formEl.tagName)
         ? [...formEl.elements]
         : [...formEl.querySelectorAll("input")];
@@ -102,10 +130,14 @@ function guessUsernameInput(formEl) {
         if (/pass(word)?/.test(el.outerHTML)) return false;
         return true;
     });
-    return possibleInputs.length > 0 ? possibleInputs[0] : null;
+    return possibleInputs.length > 0 ? possibleInputs[0] as HTMLInputElement : null;
 }
 
-export function setInputValue(input, value) {
+function isInput(el: Element): boolean {
+    return el.tagName?.toLowerCase() === "input";
+}
+
+export function setInputValue(input: HTMLInputElement, value: string): void {
     nativeInputValueSetter.call(input, value);
     const inputEvent = new Event("input", { bubbles: true });
     input.dispatchEvent(inputEvent);
@@ -113,7 +145,7 @@ export function setInputValue(input, value) {
     input.dispatchEvent(changeEvent);
 }
 
-export function sortFormElements(elements, type) {
+export function sortFormElements<T extends HTMLElement>(elements: Array<T>, type: FormElementScoringType): Array<T> {
     const tests = FORM_ELEMENT_SCORING[type];
     if (!tests) {
         throw new Error(`Failed sorting form elements: Type is invalid: ${type}`);

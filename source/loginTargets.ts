@@ -1,14 +1,14 @@
 import { fetchFormsWithInputs } from "./inputs.js";
-import LoginTarget from "./LoginTarget.js";
+import { LoginTarget } from "./LoginTarget.js";
 import { revealShySubmitButtons } from "./prepare.js";
 
 /**
  * Get the best login target on the current page
- * @param {Document|HTMLElement=} queryEl The element to query within
- * @returns {LoginTarget|null} A login target or null of none found
+ * @param queryEl The element to query within
+ * @returns A login target or null of none found
  * @see getLoginTargets
  */
-export function getLoginTarget(queryEl = document) {
+export function getLoginTarget(queryEl: Document | HTMLElement = document): LoginTarget | null {
     revealShySubmitButtons(queryEl);
     const targets = getLoginTargets(queryEl);
     let bestScore = -1,
@@ -28,10 +28,10 @@ export function getLoginTarget(queryEl = document) {
  * Fetches all detected login targets within some element (defaults to the current document).
  * Returned targets are not sorted or processed in any way that would indicate how likely
  * they are to be the 'correct' login form for the page.
- * @param {Document|HTMLElement=} queryEl The element to query within
- * @returns {Array.<LoginTarget>} An array of login targets
+ * @param queryEl The element to query within
+ * @returns An array of login targets
  */
-export function getLoginTargets(queryEl = document) {
+export function getLoginTargets(queryEl: Document | HTMLElement = document): Array<LoginTarget> {
     revealShySubmitButtons(queryEl);
     return fetchFormsWithInputs(queryEl).map((info) => {
         const { form, usernameFields, passwordFields, submitButtons } = info;

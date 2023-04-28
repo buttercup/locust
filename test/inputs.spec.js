@@ -1,5 +1,7 @@
-import { fetchFormsWithInputs, setInputValue, sortFormElements } from "../../source/inputs.js";
-import { FORM_QUERIES } from "../../source/inputPatterns.js";
+const { expect } = require("chai");
+const sinon = require("sinon");
+const { fetchFormsWithInputs, setInputValue, sortFormElements } = require("../dist/inputs.js");
+const { FORM_QUERIES } = require("../dist/inputPatterns.js");
 
 describe("inputs", function () {
     describe("fetchFormsWithInputs", function () {
@@ -27,7 +29,7 @@ describe("inputs", function () {
             };
             this.forms.push(fakeForm);
             fetchFormsWithInputs(this.queryEl);
-            expect(fakeForm.querySelectorAll.calledThrice).to.be.true;
+            expect(fakeForm.querySelectorAll.callCount).to.be.at.least(3);
         });
 
         it("filters forms without password fields", function () {
