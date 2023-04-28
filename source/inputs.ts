@@ -1,6 +1,7 @@
 import isVisible from "is-visible";
 import {
     FORM_QUERIES,
+    OTP_QUERIES,
     PASSWORD_QUERIES,
     SUBMIT_BUTTON_QUERIES,
     USERNAME_QUERIES
@@ -9,6 +10,7 @@ import {
 export interface FetchedForm {
     form: HTMLFormElement;
     usernameFields: Array<HTMLInputElement>;
+    otpFields: Array<HTMLInputElement>;
     passwordFields: Array<HTMLInputElement>;
     submitButtons: Array<HTMLElement>;
 }
@@ -32,6 +34,16 @@ const FORM_ELEMENT_SCORING = {
         { test: /class="([^\"]*\b|)((uname|usr)\b)/, value: 1 },
         { test: /class="([^\"]*\b|)((username|user|email)\b)/, value: 3 },
         { test: /formcontrolname="[^\"]*user/i, value: 1 }
+    ],
+    otp: [
+        { test: /autocomplete=\"?one-time-code\"?/, value: 10 },
+        { test: /id="otp"/, value: 9 },
+        { test: /id="mfa"/, value: 9 },
+        { test: /id="otp/, value: 7 },
+        { test: /id="mfa/, value: 6 },
+        { test: /id="[^"]+otp"/, value: 5 },
+        { test: /id="[^"]+mfa"/, value: 4 },
+        { test: /inputmode="numeric"/, value: 3 }
     ],
     password: [
         { test: /type="password"/, value: 10 },
@@ -70,6 +82,7 @@ export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document)
                 form: formEl,
                 usernameFields: fetchUsernameInputs(formEl),
                 passwordFields: fetchPasswordInputs(formEl),
+                otpFields: fetchOTPInputs(formEl),
                 submitButtons: fetchSubmitButtons(formEl)
             };
             if (form.usernameFields.length <= 0) {
@@ -81,6 +94,12 @@ export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document)
             return form;
         })
         .filter((form) => form.passwordFields.length + form.usernameFields.length > 0);
+}
+
+function fetchOTPInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
+    const megaQuery = OTP_QUERIES.join(", ");
+    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    return sortFormElements(inputs, "otp");
 }
 
 function fetchPasswordInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {

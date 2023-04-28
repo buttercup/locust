@@ -37,24 +37,16 @@ export class LoginTarget extends EventEmitter {
     protected _changeListeners: Record<LoginTargetFeature, null | ChangeListener> = {
         [LoginTargetFeature.Username]: null,
         [LoginTargetFeature.Password]: null,
+        [LoginTargetFeature.OTP]: null,
         [LoginTargetFeature.Submit]: null,
         [LoginTargetFeature.Form]: null
     };
     protected _forceSubmitDelay: number = FORCE_SUBMIT_DELAY;
     protected _form: HTMLFormElement | null = null;
+    protected _otpField: HTMLInputElement | null = null;
     protected _passwordField: HTMLInputElement | null = null;
     protected _submitButton: HTMLElement | null = null;
     protected _usernameField: HTMLInputElement | null = null;
-
-    constructor() {
-        super();
-        this._changeListeners = {
-            username: null,
-            password: null,
-            submit: null,
-            form: null
-        };
-    }
 
     /**
      * Delay in milliseconds that the library should wait before force submitting the form
@@ -68,6 +60,13 @@ export class LoginTarget extends EventEmitter {
      */
     get form() {
         return this._form;
+    }
+
+    /**
+     * The OTP input element
+     */
+    get otpField() {
+        return this._otpField;
     }
 
     /**
@@ -99,6 +98,13 @@ export class LoginTarget extends EventEmitter {
         if (form) {
             this._form = form;
             this._listenForUpdates(LoginTargetFeature.Form, form);
+        }
+    }
+
+    set otpField(field: HTMLInputElement) {
+        if (field) {
+            this._otpField = field;
+            this._listenForUpdates(LoginTargetFeature.OTP, field);
         }
     }
 
@@ -142,16 +148,16 @@ export class LoginTarget extends EventEmitter {
     }
 
     /**
-     * Fill username into the username field.
-     * @param username The username to enter
+     * Enter OTP digits into the OTP field.
+     * @param otp The OTP digits to enter
      * @returns A promise that resolves once the data has been entered
      * @memberof LoginTarget
      * @example
-     *      loginTarget.fillUsername("myUsername")
+     *      loginTarget.fillOTP("123456")
      */
-    async fillUsername(username: string): Promise<void> {
-        if (this.usernameField) {
-            setInputValue(this.usernameField, username);
+    async fillOTP(otp: string): Promise<void> {
+        if (this.otpField) {
+            setInputValue(this.otpField, otp);
         }
     }
 
@@ -170,16 +176,17 @@ export class LoginTarget extends EventEmitter {
     }
 
     /**
-     * Enter credentials into the form without logging in
-     * @param {String} username The username to enter
-     * @param {String} password The password to enter
-     * @returns {Promise} A promise that resolves once the data has been entered
+     * Fill username into the username field.
+     * @param username The username to enter
+     * @returns A promise that resolves once the data has been entered
      * @memberof LoginTarget
      * @example
-     *      loginTarget.enterDetails("myUsername", "myPassword");
+     *      loginTarget.fillUsername("myUsername")
      */
-    async enterDetails(username: string, password: string): Promise<void> {
-        return Promise.all([this.fillUsername(username), this.fillPassword(password)]).then(NOOP);
+    async fillUsername(username: string): Promise<void> {
+        if (this.usernameField) {
+            setInputValue(this.usernameField, username);
+        }
     }
 
     /**
@@ -202,7 +209,8 @@ export class LoginTarget extends EventEmitter {
      *      loginTarget.login("myUsername", "myPassword");
      */
     async login(username: string, password: string, force: boolean = false): Promise<void> {
-        await this.enterDetails(username, password);
+        await this.fillUsername(username);
+        await this.fillPassword(password);
         await this.submit(force);
     }
 
