@@ -18,13 +18,7 @@ _When requiring this library directly via `@buttercup/locust`, the minified vers
 
 ## Usage
 
-Locust is a UMD library, so it can be used in a variety of places (such as in the browser, CommonJS2 and AMD systems). You can either import it:
-
-```javascript
-const Locust = require("@buttercup/locust");
-```
-
-Or embed it in a webpage and access it via `window.Locust`.
+Locust is an ESM-only library, so you must include it in another project and use a bundler, such as Webpack, to build it for the browser.
 
 Locust exports a couple of useful methods, but the one which provides the most simple approach to logging in is `getLoginTarget`:
 
