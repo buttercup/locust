@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v2.0.1
+_2023-04-28_
+
+ * **Bugfix**:
+   * Missing dependencies due to new Typescript build
+
 ## v2.0.0
 _2023-04-28_
 
