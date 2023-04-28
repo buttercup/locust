@@ -41,6 +41,7 @@ const FORM_ELEMENT_SCORING = {
         { test: /id="mfa"/, value: 9 },
         { test: /id="otp/, value: 7 },
         { test: /id="mfa/, value: 6 },
+        { test: /(name|id)="one-time-(password|code)/, value: 10 },
         { test: /id="[^"]+otp"/, value: 5 },
         { test: /id="[^"]+mfa"/, value: 4 },
         { test: /inputmode="numeric"/, value: 3 }
@@ -78,11 +79,18 @@ function fetchForms(queryEl: Document | HTMLElement = document): Array<HTMLFormE
 export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document) {
     return fetchForms(queryEl)
         .map((formEl) => {
+            let usernameFields = fetchUsernameInputs(formEl);
+            const passwordFields = fetchPasswordInputs(formEl);
+            const otpFields = fetchOTPInputs(formEl);
+            if (otpFields.length > 0 && passwordFields.length === 0) {
+                // No password fields, so filter out any OTP fields from the potential username fields
+                usernameFields = usernameFields.filter(field => otpFields.includes(field) === false);
+            }
             const form: FetchedForm = {
                 form: formEl,
-                usernameFields: fetchUsernameInputs(formEl),
-                passwordFields: fetchPasswordInputs(formEl),
-                otpFields: fetchOTPInputs(formEl),
+                usernameFields,
+                passwordFields,
+                otpFields,
                 submitButtons: fetchSubmitButtons(formEl)
             };
             if (form.usernameFields.length <= 0) {
@@ -158,6 +166,9 @@ export function sortFormElements<T extends HTMLElement>(elements: Array<T>, type
         }, 0);
         if (isVisible(input)) {
             score += VISIBILE_SCORE_INCREMENT;
+        }
+        if (typeof input.value === "string" && input.value.length > 0) {
+            score -= 10;
         }
         input.setAttribute("data-bcup-score", score);
         return score;
