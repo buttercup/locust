@@ -93,7 +93,7 @@ export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document)
                 otpFields,
                 submitButtons: fetchSubmitButtons(formEl)
             };
-            if (form.usernameFields.length <= 0) {
+            if (form.usernameFields.length <= 0 && otpFields.length <= 0) {
                 const input = guessUsernameInput(formEl);
                 if (input) {
                     form.usernameFields.push(input);
@@ -101,7 +101,7 @@ export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document)
             }
             return form;
         })
-        .filter((form) => form.passwordFields.length + form.usernameFields.length > 0);
+        .filter((form) => form.otpFields.length + form.passwordFields.length + form.usernameFields.length > 0);
 }
 
 function fetchOTPInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {

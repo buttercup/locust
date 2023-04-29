@@ -11,7 +11,7 @@ import { revealShySubmitButtons } from "./prepare.js";
 export function getLoginTarget(queryEl: Document | HTMLElement = document): LoginTarget | null {
     revealShySubmitButtons(queryEl);
     const targets = getLoginTargets(queryEl);
-    let bestScore = -1,
+    let bestScore = -9999,
         bestTarget = null;
     targets.forEach((target) => {
         const score = target.calculateScore();
@@ -34,10 +34,11 @@ export function getLoginTarget(queryEl: Document | HTMLElement = document): Logi
 export function getLoginTargets(queryEl: Document | HTMLElement = document): Array<LoginTarget> {
     revealShySubmitButtons(queryEl);
     return fetchFormsWithInputs(queryEl).map((info) => {
-        const { form, usernameFields, passwordFields, submitButtons } = info;
+        const { form, otpFields, usernameFields, passwordFields, submitButtons } = info;
         const target = new LoginTarget();
         target.usernameField = usernameFields[0];
         target.passwordField = passwordFields[0];
+        target.otpField = otpFields[0];
         target.submitButton = submitButtons[0];
         target.form = form;
         if (submitButtons.length > 1) {

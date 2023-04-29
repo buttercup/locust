@@ -244,7 +244,7 @@ export class LoginTarget extends EventEmitter {
      * @fires LoginTarget#formSubmitted
      */
     protected _listenForUpdates(type: LoginTargetFeature, input: HTMLElement) {
-        if (/username|password|submit|form/.test(type) !== true) {
+        if (Object.values(LoginTargetFeature).includes(type) === false) {
             throw new Error(`Failed listening for field changes: Unrecognised type: ${type}`);
         }
         // Detect the necessary event listener name
