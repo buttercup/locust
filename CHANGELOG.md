@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v2.0.3
+_2023-04-29_
+
+ * **Bugfix**:
+   * OTP-only forms not recognised
+
 ## v2.0.2
 _2023-04-28_
 
