@@ -1,5 +1,12 @@
 [
     {
+        "name": "OTP Test @ stackblitz",
+        "url": "https://js-flbjc3.stackblitz.io",
+        "expectedFields": {
+            "otp": "input[name=one-time-code]"
+        }
+    },
+    {
         "name": "Outlook",
         "url": "https://login.live.com/login.srf",
         "expectedFields": {

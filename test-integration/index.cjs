@@ -1,6 +1,7 @@
 const path = require("node:path");
 const fs = require("node:fs/promises");
 const puppeteer = require("puppeteer");
+const sleep = require("sleep-promise");
 const TESTS = require("./test-forms.json");
 
 const LOCUST_PATH = path.resolve(__dirname, "../dist/index.js");
@@ -8,7 +9,17 @@ const LOCUST_PATH = path.resolve(__dirname, "../dist/index.js");
 async function initialiseBrowser() {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    page.setBypassCSP(true);
+    await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109) Gecko/20100101 Firefox/112.0");
+    await page.setBypassCSP(true);
+    await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, "platform", { get: () => "Win32" });
+        Object.defineProperty(navigator, "productSub", { get: () => "20100101" });
+        Object.defineProperty(navigator, "vendor", { get: () => "" });
+        Object.defineProperty(navigator, "oscpu", { get: () => "Windows NT 10.0; Win64; x64" });
+    });
+    page.on("pageerror", evt => console.error(evt));
+    // page.on("console", evt => console.log("[page]", evt.text()));
+    page.on("error", evt => console.error(evt));
     return [browser, page];
 }
 
@@ -21,20 +32,34 @@ async function testConfiguration(config, browser, page) {
     const jsContent = await fs.readFile(LOCUST_PATH, "utf8");
     const waitForUsernameQuery = expectedFields.username || "body";
     const waitForPasswordQuery = expectedFields.password || "body";
+    const waitForOTPQuery = expectedFields.otp || "body";
+    console.log("   ↦ navigation");
     await page.goto(url);
-    console.log("   . navigation");
+    console.log("   ↦ idle");
     await Promise.race([
         new Promise(resolve => setTimeout(resolve, 5000)),
         page.waitForNetworkIdle()
     ]);
-    console.log("   . idle");
+    await sleep(1000);
+    await page.evaluate(() => {
+        const clicker = document.querySelector("button[onclick*=runProject]");
+        if (clicker) {
+            clicker.click();
+        }
+    });
+    console.log(`   ↦ username (${waitForUsernameQuery})`);
+    await page.waitForSelector(waitForUsernameQuery);
+    console.log(`   ↦ password (${waitForPasswordQuery})`);
+    await page.waitForSelector(waitForPasswordQuery);
+    console.log(`   ↦ otp (${waitForOTPQuery})`);
+    await page.waitForSelector(waitForOTPQuery);
     await page.addScriptTag({
         content: jsContent
     });
-    await page.waitForSelector(waitForUsernameQuery);
-    console.log("   . username");
-    await page.waitForSelector(waitForPasswordQuery);
-    console.log("   . password");
+    await sleep(500);
+    // console.log(await page.evaluate(() => {
+    //     return document.body.outerHTML;
+    // }));
     await page.evaluate((expectedFields) => {
         if (!window.Locust) {
             throw new Error("No global Locust variable found");
@@ -56,6 +81,14 @@ async function testConfiguration(config, browser, page) {
             if (target.passwordField !== passwordField) {
                 throw new Error(
                     `No password field found matching query: ${expectedFields.password}`
+                );
+            }
+        }
+        if (expectedFields && expectedFields.otp) {
+            const otpField = document.querySelector(expectedFields.otp);
+            if (target.otpField !== otpField) {
+                throw new Error(
+                    `No OTP field found matching query: ${expectedFields.otp}`
                 );
             }
         }
