@@ -1,5 +1,10 @@
 # Locust Changelog
 
+## v2.1.0
+_2023-05-01_
+
+ * `LoginTarget` event types
+
 ## v2.0.3
 _2023-04-29_
 
