@@ -9,6 +9,11 @@ interface ChangeListener {
     listener: () => void;
 }
 
+interface LoginTargetEvents {
+    formSubmitted: (event: { source: "form" | "submitButton"; }) => void;
+    valueChanged: (event: { type: LoginTargetFeature; value: string; }) => void;
+}
+
 export const FORCE_SUBMIT_DELAY = 7500;
 const NOOP = () => {};
 
@@ -31,7 +36,7 @@ function getEventListenerForElement(type: LoginTargetFeature): string {
  * The LoginTarget class which represents a 'target' for logging in
  * with some credentials
  */
-export class LoginTarget extends EventEmitter {
+export class LoginTarget extends EventEmitter<LoginTargetEvents> {
     public baseScore: number = 0;
 
     protected _changeListeners: Record<LoginTargetFeature, null | ChangeListener> = {
