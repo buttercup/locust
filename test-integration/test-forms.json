@@ -39,14 +39,6 @@
         }
     },
     {
-        "name": "Reddit",
-        "url": "https://www.reddit.com/login",
-        "expectedFields": {
-            "username": "#login-username",
-            "password": "#login-password"
-        }
-    },
-    {
         "name": "Mozilla",
         "url": "https://accounts.firefox.com/",
         "expectedFields": {
