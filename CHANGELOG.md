@@ -1,5 +1,10 @@
 # Locust Changelog
 
+## v2.2.0
+_2024-03-20_
+
+ * `valueChanged` event `source` (`keypress`/`fill`)
+
 ## v2.1.0
 _2023-05-01_
 
