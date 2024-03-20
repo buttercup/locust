@@ -39,10 +39,11 @@
         }
     },
     {
-        "name": "Mozilla",
-        "url": "https://accounts.firefox.com/",
+        "name": "Fill.dev",
+        "url": "https://fill.dev/form/login-simple",
         "expectedFields": {
-            "username": "input[name=email]"
+            "username": "input#username",
+            "password": "input#password"
         }
     },
     {
