@@ -7,8 +7,13 @@ const TESTS = require("./test-forms.json");
 const LOCUST_PATH = path.resolve(__dirname, "../dist/index.js");
 
 async function initialiseBrowser() {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
+    await page.setViewport({
+        width: 1024,
+        height: 768,
+        deviceScaleFactor: 1
+    });
     await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109) Gecko/20100101 Firefox/112.0");
     await page.setBypassCSP(true);
     await page.evaluateOnNewDocument(() => {

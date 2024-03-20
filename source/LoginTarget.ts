@@ -3,6 +3,7 @@ import EventEmitter from "eventemitter3";
 import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
 import { setInputValue } from "./inputs.js";
 import { LoginTargetFeature } from "./types.js";
+import { LocustInputEvent } from "./LocustInputEvent.js";
 
 interface ChangeListener {
     input: HTMLElement;
@@ -11,7 +12,7 @@ interface ChangeListener {
 
 interface LoginTargetEvents {
     formSubmitted: (event: { source: "form" | "submitButton"; }) => void;
-    valueChanged: (event: { type: LoginTargetFeature; value: string; }) => void;
+    valueChanged: (event: { source: "keypress" | "fill", type: LoginTargetFeature; value: string; }) => void;
 }
 
 export const FORCE_SUBMIT_DELAY = 7500;
@@ -260,21 +261,23 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
             input.removeEventListener(eventListenerName, listener, false);
         }
         // Emit a value change event
-        let handleEvent = NOOP;
+        let handleEvent: (evt?: Event) => void = NOOP;
         if (type === "submit" || type === "form") {
             // Listener function for the submission of the form
             const source = type === "form" ? "form" : "submitButton";
             handleEvent = () => this.emit("formSubmitted", { source });
         } else {
-            const emit = (value: string) => {
+            const emit = (value: string, source: "keypress" | "fill") => {
                 this.emit("valueChanged", {
+                    source,
                     type,
                     value
                 });
             };
             // Listener function for the input element
-            handleEvent = function () {
-                emit(this.value);
+            handleEvent = function (evt: Event) {
+                const source = evt instanceof LocustInputEvent ? evt.source : "keypress";
+                emit(this.value, source);
             };
         }
         // Store the listener information

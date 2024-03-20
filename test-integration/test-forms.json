@@ -1,5 +1,13 @@
 [
     {
+        "name": "Meetabit",
+        "url": "https://meetabit.com/users/sign_in",
+        "expectedFields": {
+            "username": "input#user_email",
+            "password": "input#user_password"
+        }
+    },
+    {
         "name": "OTP Test @ stackblitz",
         "url": "https://js-flbjc3.stackblitz.io",
         "expectedFields": {
@@ -39,18 +47,11 @@
         }
     },
     {
-        "name": "Reddit",
-        "url": "https://www.reddit.com/login",
+        "name": "Fill.dev",
+        "url": "https://fill.dev/form/login-simple",
         "expectedFields": {
-            "username": "#loginUsername",
-            "password": "#loginPassword"
-        }
-    },
-    {
-        "name": "Amazon",
-        "url": "https://www.amazon.com/ap/signin?_encoding=UTF8&ignoreAuthState=1&openid.assoc_handle=usflex&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.ns.pape=http%3A%2F%2Fspecs.openid.net%2Fextensions%2Fpape%2F1.0&openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.com%2F%3Fref_%3Dnav_custrec_signin&switch_account=",
-        "expectedFields": {
-            "username": "form[name=signIn] input#ap_email"
+            "username": "input#username",
+            "password": "input#password"
         }
     },
     {
