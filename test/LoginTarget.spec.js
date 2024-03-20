@@ -26,6 +26,32 @@ describe("LoginTarget", function () {
         expect(currentValue).to.equal("user5644");
     });
 
+    it("specifies event source as 'fill' when set using the setter method", function () {
+        let source = "";
+        this.target.usernameField = document.createElement("input");
+        this.target.on("valueChanged", (info) => {
+            if (info.type === "username") {
+                source = info.source;
+            }
+        });
+        setInputValue(this.target.usernameField, "user5644");
+        expect(source).to.equal("fill");
+    });
+
+    it("specifies event source as 'keypress' when set updating the input", function () {
+        let source = "";
+        this.target.usernameField = document.createElement("input");
+        this.target.on("valueChanged", (info) => {
+            if (info.type === "username") {
+                source = info.source;
+            }
+        });
+        this.target.usernameField.value = "user5655";
+        this.target.usernameField.dispatchEvent(new Event("input"));
+        this.target.usernameField.dispatchEvent(new Event("change"));
+        expect(source).to.equal("keypress");
+    });
+
     it("fires events when the submit button is clicked", function () {
         let formSubmitted = 0;
         this.target.on("formSubmitted", (info) => {

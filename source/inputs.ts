@@ -6,6 +6,7 @@ import {
     SUBMIT_BUTTON_QUERIES,
     USERNAME_QUERIES
 } from "./inputPatterns.js";
+import { LocustInputEvent } from "./LocustInputEvent.js";
 
 export interface FetchedForm {
     form: HTMLFormElement;
@@ -147,9 +148,9 @@ function isInput(el: Element): boolean {
 
 export function setInputValue(input: HTMLInputElement, value: string): void {
     nativeInputValueSetter.call(input, value);
-    const inputEvent = new Event("input", { bubbles: true });
+    const inputEvent = new LocustInputEvent("fill", "input", { bubbles: true });
     input.dispatchEvent(inputEvent);
-    const changeEvent = new Event("change", { bubbles: true });
+    const changeEvent = new LocustInputEvent("fill", "change", { bubbles: true });
     input.dispatchEvent(changeEvent);
 }
 
