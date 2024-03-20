@@ -42,7 +42,7 @@
     "puppeteer_skip_chromium_download": true
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0",
+    "eventemitter3": "^5.0.1",
     "is-visible": "^2.2.0"
   },
   "devDependencies": {
