@@ -9,7 +9,7 @@ import {
 import { LocustInputEvent } from "./LocustInputEvent.js";
 
 export interface FetchedForm {
-    form: HTMLFormElement;
+    form: HTMLFormElement | HTMLDivElement;
     usernameFields: Array<HTMLInputElement>;
     otpFields: Array<HTMLInputElement>;
     passwordFields: Array<HTMLInputElement>;
@@ -77,32 +77,27 @@ function fetchForms(queryEl: Document | HTMLElement = document): Array<HTMLFormE
     return Array.prototype.slice.call(queryEl.querySelectorAll(FORM_QUERIES.join(",")));
 }
 
-export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document) {
-    return fetchForms(queryEl)
-        .map((formEl) => {
-            let usernameFields = fetchUsernameInputs(formEl);
-            const passwordFields = fetchPasswordInputs(formEl);
-            const otpFields = fetchOTPInputs(formEl);
-            if (otpFields.length > 0 && passwordFields.length === 0) {
-                // No password fields, so filter out any OTP fields from the potential username fields
-                usernameFields = usernameFields.filter(field => otpFields.includes(field) === false);
-            }
-            const form: FetchedForm = {
-                form: formEl,
-                usernameFields,
-                passwordFields,
-                otpFields,
-                submitButtons: fetchSubmitButtons(formEl)
-            };
-            if (form.usernameFields.length <= 0 && otpFields.length <= 0) {
-                const input = guessUsernameInput(formEl);
-                if (input) {
-                    form.usernameFields.push(input);
-                }
-            }
-            return form;
-        })
-        .filter((form) => form.otpFields.length + form.passwordFields.length + form.usernameFields.length > 0);
+export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document): Array<FetchedForm> {
+    return fetchForms(queryEl).reduce((output: Array<FetchedForm>, formEl: HTMLFormElement | HTMLDivElement) => {
+        let usernameFields = fetchUsernameInputs(formEl);
+        const passwordFields = fetchPasswordInputs(formEl);
+        const otpFields = fetchOTPInputs(formEl);
+        if (otpFields.length > 0 && passwordFields.length === 0) {
+            // No password fields, so filter out any OTP fields from the potential username fields
+            usernameFields = usernameFields.filter(field => otpFields.includes(field) === false);
+        }
+        const form: FetchedForm = {
+            form: formEl,
+            usernameFields,
+            passwordFields,
+            otpFields,
+            submitButtons: fetchSubmitButtons(formEl)
+        };
+        if (form.usernameFields.length <= 0 && otpFields.length <= 0 && passwordFields.length <= 0) {
+            return output;
+        }
+        return [...output, form];
+    }, []);
 }
 
 function fetchOTPInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
@@ -127,19 +122,6 @@ function fetchUsernameInputs(queryEl: Document | HTMLElement = document): Array<
     const megaQuery = USERNAME_QUERIES.join(", ");
     const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
     return sortFormElements(inputs, "username");
-}
-
-function guessUsernameInput(formEl: HTMLFormElement): HTMLInputElement | null {
-    const elements = /^form$/i.test(formEl.tagName)
-        ? [...formEl.elements]
-        : [...formEl.querySelectorAll("input")];
-    const possibleInputs = elements.filter((el) => {
-        if (el.tagName.toLowerCase() !== "input") return false;
-        if (["email", "text"].indexOf(el.getAttribute("type")) === -1) return false;
-        if (/pass(word)?/.test(el.outerHTML)) return false;
-        return true;
-    });
-    return possibleInputs.length > 0 ? possibleInputs[0] as HTMLInputElement : null;
 }
 
 function isInput(el: Element): boolean {

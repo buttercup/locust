@@ -48,7 +48,7 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
         [LoginTargetFeature.Form]: null
     };
     protected _forceSubmitDelay: number = FORCE_SUBMIT_DELAY;
-    protected _form: HTMLFormElement | null = null;
+    protected _form: HTMLFormElement | HTMLDivElement | null = null;
     protected _otpField: HTMLInputElement | null = null;
     protected _passwordField: HTMLInputElement | null = null;
     protected _submitButton: HTMLElement | null = null;
@@ -100,7 +100,7 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
         this._forceSubmitDelay = delay;
     }
 
-    set form(form: HTMLFormElement) {
+    set form(form: HTMLFormElement | HTMLDivElement) {
         if (form) {
             this._form = form;
             this._listenForUpdates(LoginTargetFeature.Form, form);
@@ -228,13 +228,15 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
      * @returns A promise that resolves once submission has been completed
      */
     async submit(force: boolean = false): Promise<void> {
-        if (!this.submitButton) {
+        if (this.submitButton) {
+            // Click button
+            this.submitButton.click();
+        } else if (this.form.tagName.toLowerCase() === "form") {
             // No button, just try submitting
-            this.form.submit();
-            return Promise.resolve();
+            (this.form as HTMLFormElement).submit();
+        } else {
+            throw new Error("Invalid form: Not form element and no valid submit button");
         }
-        // Click button
-        this.submitButton.click();
         if (force) {
             await this._waitForNoUnload();
         }
@@ -313,9 +315,9 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
                 });
             })
         ]);
-        if (!hasUnloaded) {
+        if (!hasUnloaded && this.form.tagName.toLowerCase() === "form") {
             // No unload events detected, so we need for force submit
-            this.form.submit();
+            (this.form as HTMLFormElement).submit();
         }
     }
 }
