@@ -1,5 +1,11 @@
 # Locust Changelog
 
+## v2.2.1
+_2024-03-26_
+
+ * **Bugfix**:
+   * Username field guessing flags bad forms as login forms
+
 ## v2.2.0
 _2024-03-20_
 
