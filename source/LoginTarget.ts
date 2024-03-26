@@ -228,10 +228,10 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
      * @returns A promise that resolves once submission has been completed
      */
     async submit(force: boolean = false): Promise<void> {
-        if (this.form.tagName.toLowerCase() !== "form" && this.submitButton) {
+        if (this.submitButton) {
             // Click button
             this.submitButton.click();
-        } else if (!this.submitButton) {
+        } else if (this.form.tagName.toLowerCase() === "form") {
             // No button, just try submitting
             (this.form as HTMLFormElement).submit();
         } else {
