@@ -63,8 +63,7 @@ const USERNAMES_OPTIONAL_TEXT = [
     "input[name*=login i]",
     "input[id*=email i]",
     "input[id*=login i]",
-    "input[formcontrolname*=user i]",
-    "input[class*=user i]"
+    "input[formcontrolname*=user i]"
 ].reduce(
     (queries, next) => [
         ...queries,

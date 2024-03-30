@@ -1,9 +1,9 @@
 import isVisible from "is-visible";
 import EventEmitter from "eventemitter3";
 import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
-import { setInputValue } from "./inputs.js";
 import { LoginTargetFeature } from "./types.js";
 import { LocustInputEvent } from "./LocustInputEvent.js";
+import { typeIntoInput } from "./typing.js";
 
 interface ChangeListener {
     input: HTMLElement;
@@ -163,7 +163,7 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
      */
     async fillOTP(otp: string): Promise<void> {
         if (this.otpField) {
-            setInputValue(this.otpField, otp);
+            await typeIntoInput(this.otpField, otp);
         }
     }
 
@@ -177,7 +177,7 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
      */
     async fillPassword(password: string): Promise<void> {
         if (this.passwordField) {
-            setInputValue(this.passwordField, password);
+            await typeIntoInput(this.passwordField, password);
         }
     }
 
@@ -191,7 +191,7 @@ export class LoginTarget extends EventEmitter<LoginTargetEvents> {
      */
     async fillUsername(username: string): Promise<void> {
         if (this.usernameField) {
-            setInputValue(this.usernameField, username);
+            await typeIntoInput(this.usernameField, username);
         }
     }
 
