@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
-const { fetchFormsWithInputs, setInputValue, sortFormElements } = require("../dist/inputs.js");
+const { fetchFormsWithInputs, sortFormElements } = require("../dist/inputs.js");
 const { FORM_QUERIES } = require("../dist/inputPatterns.js");
 
 describe("inputs", function () {
@@ -46,51 +46,6 @@ describe("inputs", function () {
             this.forms.push(fakeForm);
             const forms = fetchFormsWithInputs(this.queryEl);
             expect(forms).to.have.lengthOf(0);
-        });
-    });
-
-    describe("setInputValue", function () {
-        beforeEach(function () {
-            this.input = document.createElement("input");
-            document.body.appendChild(this.input);
-        });
-
-        afterEach(function () {
-            document.body.removeChild(this.input);
-        });
-
-        it("sets the input's value", function () {
-            expect(this.input.value).to.equal("");
-            setInputValue(this.input, "new value");
-            expect(this.input.value).to.equal("new value");
-        });
-
-        it("fires the input's 'input' event", function () {
-            return new Promise((resolve) => {
-                this.input.addEventListener(
-                    "input",
-                    (event) => {
-                        expect(event.target.value).to.equal("123");
-                        resolve();
-                    },
-                    false
-                );
-                setInputValue(this.input, "123");
-            });
-        });
-
-        it("fires the input's 'change' event", function () {
-            return new Promise((resolve) => {
-                this.input.addEventListener(
-                    "change",
-                    (event) => {
-                        expect(event.target.value).to.equal("456");
-                        resolve();
-                    },
-                    false
-                );
-                setInputValue(this.input, "456");
-            });
         });
     });
 

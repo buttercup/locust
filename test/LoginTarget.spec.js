@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
 const { LoginTarget } = require("../dist/LoginTarget.js");
-const { setInputValue } = require("../dist/inputs.js");
+const { typeIntoInput } = require("../dist/typing.js");
 
 describe("LoginTarget", function () {
     beforeEach(function () {
@@ -14,7 +14,7 @@ describe("LoginTarget", function () {
         expect(this.target).to.have.property("once").that.is.a("function");
     });
 
-    it("fires events when username inputs are updated", function () {
+    it("fires events when username inputs are updated", async function () {
         let currentValue = "";
         this.target.usernameField = document.createElement("input");
         this.target.on("valueChanged", (info) => {
@@ -22,11 +22,11 @@ describe("LoginTarget", function () {
                 currentValue = info.value;
             }
         });
-        setInputValue(this.target.usernameField, "user5644");
+        await typeIntoInput(this.target.usernameField, "user5644");
         expect(currentValue).to.equal("user5644");
     });
 
-    it("specifies event source as 'fill' when set using the setter method", function () {
+    it("specifies event source as 'fill' when set using the setter method", async function () {
         let source = "";
         this.target.usernameField = document.createElement("input");
         this.target.on("valueChanged", (info) => {
@@ -34,7 +34,7 @@ describe("LoginTarget", function () {
                 source = info.source;
             }
         });
-        setInputValue(this.target.usernameField, "user5644");
+        await typeIntoInput(this.target.usernameField, "user5644");
         expect(source).to.equal("fill");
     });
 
@@ -84,7 +84,7 @@ describe("LoginTarget", function () {
         expect(formSubmitted).to.equal(1);
     });
 
-    it("fires events when password inputs are updated", function () {
+    it("fires events when password inputs are updated", async function () {
         let currentValue = "";
         this.target.passwordField = document.createElement("input");
         this.target.on("valueChanged", (info) => {
@@ -92,7 +92,7 @@ describe("LoginTarget", function () {
                 currentValue = info.value;
             }
         });
-        setInputValue(this.target.passwordField, "pass!3233 5");
+        await typeIntoInput(this.target.passwordField, "pass!3233 5");
         expect(currentValue).to.equal("pass!3233 5");
     });
 

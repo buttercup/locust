@@ -6,7 +6,6 @@ import {
     SUBMIT_BUTTON_QUERIES,
     USERNAME_QUERIES
 } from "./inputPatterns.js";
-import { LocustInputEvent } from "./LocustInputEvent.js";
 
 export interface FetchedForm {
     form: HTMLFormElement | HTMLDivElement;
@@ -68,11 +67,6 @@ const VISIBILE_SCORE_INCREMENT = 8;
 
 type FormElementScoringType = keyof typeof FORM_ELEMENT_SCORING;
 
-const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-    window.HTMLInputElement.prototype,
-    "value"
-).set;
-
 function fetchForms(queryEl: Document | HTMLElement = document): Array<HTMLFormElement> {
     return Array.prototype.slice.call(queryEl.querySelectorAll(FORM_QUERIES.join(",")));
 }
@@ -126,14 +120,6 @@ function fetchUsernameInputs(queryEl: Document | HTMLElement = document): Array<
 
 function isInput(el: Element): boolean {
     return el.tagName?.toLowerCase() === "input";
-}
-
-export function setInputValue(input: HTMLInputElement, value: string): void {
-    nativeInputValueSetter.call(input, value);
-    const inputEvent = new LocustInputEvent("fill", "input", { bubbles: true });
-    input.dispatchEvent(inputEvent);
-    const changeEvent = new LocustInputEvent("fill", "change", { bubbles: true });
-    input.dispatchEvent(changeEvent);
 }
 
 export function sortFormElements<T extends HTMLElement>(elements: Array<T>, type: FormElementScoringType): Array<T> {
