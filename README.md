@@ -46,7 +46,24 @@ await target.fillOTP("123456");
 
 _**Note** that `getLoginTarget` may return `null` if no form is found, so you should check for this eventuality._
 
-You can also read the [API documentation](https://github.com/buttercup/locust/blob/master/API.md) if you're into that kind of thing.
+### Filtering
+
+You can filter input/form elements picked up by `getLoginTarget` and `getLoginTargets` by passing an element validator callback as the second parameter:
+
+```typescript
+const target = getLoginTarget(
+    document,
+    () => true
+);
+```
+
+Where the callback follows this format:
+
+```typescript
+(feature: LoginTargetFeature, element: HTMLElement) => boolean;
+```
+
+_Return `false` to ignore the element and `true` to include it. Defaults to `true` for all elements._
 
 ### Events
 

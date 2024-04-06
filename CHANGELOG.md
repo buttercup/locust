@@ -1,5 +1,12 @@
 # Locust Changelog
 
+## v2.3.0
+_2024-04-06_
+
+ * React value setter support
+ * Input value setting via prototypes
+ * Form element filtering
+
 ## v2.2.1
 _2024-03-26_
 
