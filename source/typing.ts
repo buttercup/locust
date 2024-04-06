@@ -26,8 +26,15 @@ export async function typeIntoInput(input: HTMLInputElement, value: string): Pro
     while (characters.length > 0) {
         const char = characters.shift();
         newValue = `${newValue}${char}`;
+        // Set using attribute
         input.setAttribute("value", newValue);
+        // Set using native methods
+        const proto = Object.getPrototypeOf(input);
+        const protoSetter = Object.getOwnPropertyDescriptor(proto, "value").set;
         nativeInputValueSetter.call(input, newValue);
+        if (protoSetter && nativeInputValueSetter !== protoSetter) {
+            protoSetter.call(input, newValue);
+        }
         // Try react set (React 16)
         const tracker = (input as any)._valueTracker;
         if (tracker) {
