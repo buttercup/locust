@@ -1,9 +1,9 @@
 import isVisible from "is-visible";
 import EventEmitter from "eventemitter3";
 import { getSharedObserver as getUnloadObserver } from "./UnloadObserver.js";
-import { LoginTargetFeature } from "./types.js";
 import { LocustInputEvent } from "./LocustInputEvent.js";
 import { typeIntoInput } from "./typing.js";
+import { LoginTargetFeature } from "./types.js";
 
 interface ChangeListener {
     input: HTMLElement;
