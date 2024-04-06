@@ -28,8 +28,13 @@ export async function typeIntoInput(input: HTMLInputElement, value: string): Pro
         newValue = `${newValue}${char}`;
         input.setAttribute("value", newValue);
         nativeInputValueSetter.call(input, newValue);
+        // Try react set (React 16)
+        const tracker = (input as any)._valueTracker;
+        if (tracker) {
+            tracker.setValue(newValue);
+        }
         // Input event data takes the single new character
-        const inputEvent = new LocustInputEvent("fill", "input", char, { bubbles: true });
+        const inputEvent = new LocustInputEvent("fill", "input", { bubbles: true, data: char });
         input.dispatchEvent(inputEvent);
         // Wait
         const waitTime = Math.floor(Math.random() * (MAX_TYPE_WAIT - MIN_TYPE_WAIT)) + MIN_TYPE_WAIT;
@@ -39,6 +44,6 @@ export async function typeIntoInput(input: HTMLInputElement, value: string): Pro
     const blurEvent = new FocusEvent("blur", { bubbles: true });
     input.dispatchEvent(blurEvent);
     // The change event gets all of the new data
-    const changeEvent = new LocustInputEvent("fill", "change", value, { bubbles: true });
+    const changeEvent = new LocustInputEvent("fill", "change", { bubbles: true, data: value });
     input.dispatchEvent(changeEvent);
 }
