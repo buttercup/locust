@@ -1,6 +1,6 @@
 # Locust Changelog
 
-## v2.3.0
+## v2.3.1
 _2024-04-06_
 
  * React value setter support
