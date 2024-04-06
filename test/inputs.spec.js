@@ -15,7 +15,7 @@ describe("inputs", function () {
         });
 
         it("fetches forms by name", function () {
-            fetchFormsWithInputs(this.queryEl);
+            fetchFormsWithInputs(() => true, this.queryEl);
             expect(this.queryEl.querySelectorAll.calledWithExactly(FORM_QUERIES.join(","))).to.be
                 .true;
             expect(this.queryEl.querySelectorAll.calledOnce).to.be.true;
@@ -28,7 +28,7 @@ describe("inputs", function () {
                 tagName: "form"
             };
             this.forms.push(fakeForm);
-            fetchFormsWithInputs(this.queryEl);
+            fetchFormsWithInputs(() => true, this.queryEl);
             expect(fakeForm.querySelectorAll.callCount).to.be.at.least(3);
         });
 
@@ -44,7 +44,7 @@ describe("inputs", function () {
                 tagName: "form"
             };
             this.forms.push(fakeForm);
-            const forms = fetchFormsWithInputs(this.queryEl);
+            const forms = fetchFormsWithInputs(() => true, this.queryEl);
             expect(forms).to.have.lengthOf(0);
         });
     });

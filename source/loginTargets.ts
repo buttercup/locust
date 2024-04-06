@@ -1,6 +1,9 @@
 import { fetchFormsWithInputs } from "./inputs.js";
 import { LoginTarget } from "./LoginTarget.js";
 import { revealShySubmitButtons } from "./prepare.js";
+import { ElementValidatorCallback } from "./types.js";
+
+const DEFAULT_VALIDATOR: ElementValidatorCallback = () => true;
 
 /**
  * Get the best login target on the current page
@@ -8,9 +11,12 @@ import { revealShySubmitButtons } from "./prepare.js";
  * @returns A login target or null of none found
  * @see getLoginTargets
  */
-export function getLoginTarget(queryEl: Document | HTMLElement = document): LoginTarget | null {
+export function getLoginTarget(
+    queryEl: Document | HTMLElement = document,
+    validator: ElementValidatorCallback = DEFAULT_VALIDATOR
+): LoginTarget | null {
     revealShySubmitButtons(queryEl);
-    const targets = getLoginTargets(queryEl);
+    const targets = getLoginTargets(queryEl, validator);
     let bestScore = -9999,
         bestTarget = null;
     targets.forEach((target) => {
@@ -31,11 +37,15 @@ export function getLoginTarget(queryEl: Document | HTMLElement = document): Logi
  * @param queryEl The element to query within
  * @returns An array of login targets
  */
-export function getLoginTargets(queryEl: Document | HTMLElement = document): Array<LoginTarget> {
+export function getLoginTargets(
+    queryEl: Document | HTMLElement = document,
+    validator: ElementValidatorCallback = DEFAULT_VALIDATOR
+): Array<LoginTarget> {
     revealShySubmitButtons(queryEl);
-    return fetchFormsWithInputs(queryEl).map((info) => {
+    return fetchFormsWithInputs(validator, queryEl).map((info) => {
         const { form, otpFields, usernameFields, passwordFields, submitButtons } = info;
         const target = new LoginTarget();
+        // Set inputs to target - this attaches listeners
         target.usernameField = usernameFields[0];
         target.passwordField = passwordFields[0];
         target.otpField = otpFields[0];

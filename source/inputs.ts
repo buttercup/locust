@@ -6,6 +6,7 @@ import {
     SUBMIT_BUTTON_QUERIES,
     USERNAME_QUERIES
 } from "./inputPatterns.js";
+import { ElementValidatorCallback, LoginTargetFeature } from "./types.js";
 
 export interface FetchedForm {
     form: HTMLFormElement | HTMLDivElement;
@@ -71,11 +72,14 @@ function fetchForms(queryEl: Document | HTMLElement = document): Array<HTMLFormE
     return Array.prototype.slice.call(queryEl.querySelectorAll(FORM_QUERIES.join(",")));
 }
 
-export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document): Array<FetchedForm> {
+export function fetchFormsWithInputs(
+    validator: ElementValidatorCallback,
+    queryEl: Document | HTMLElement = document
+): Array<FetchedForm> {
     return fetchForms(queryEl).reduce((output: Array<FetchedForm>, formEl: HTMLFormElement | HTMLDivElement) => {
-        let usernameFields = fetchUsernameInputs(formEl);
-        const passwordFields = fetchPasswordInputs(formEl);
-        const otpFields = fetchOTPInputs(formEl);
+        let usernameFields = fetchUsernameInputs(validator, formEl);
+        const passwordFields = fetchPasswordInputs(validator, formEl);
+        const otpFields = fetchOTPInputs(validator, formEl);
         if (otpFields.length > 0 && passwordFields.length === 0) {
             // No password fields, so filter out any OTP fields from the potential username fields
             usernameFields = usernameFields.filter(field => otpFields.includes(field) === false);
@@ -85,7 +89,7 @@ export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document)
             usernameFields,
             passwordFields,
             otpFields,
-            submitButtons: fetchSubmitButtons(formEl)
+            submitButtons: fetchSubmitButtons(validator, formEl)
         };
         if (form.usernameFields.length <= 0 && otpFields.length <= 0 && passwordFields.length <= 0) {
             return output;
@@ -94,27 +98,31 @@ export function fetchFormsWithInputs(queryEl: Document | HTMLElement = document)
     }, []);
 }
 
-function fetchOTPInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
+function fetchOTPInputs(validator: ElementValidatorCallback, queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
     const megaQuery = OTP_QUERIES.join(", ");
-    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    let inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    inputs = inputs.filter(input => validator(LoginTargetFeature.OTP, input));
     return sortFormElements(inputs, "otp");
 }
 
-function fetchPasswordInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
+function fetchPasswordInputs(validator: ElementValidatorCallback, queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
     const megaQuery = PASSWORD_QUERIES.join(", ");
-    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    let inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    inputs = inputs.filter(input => validator(LoginTargetFeature.Password, input));
     return sortFormElements(inputs, "password");
 }
 
-function fetchSubmitButtons(queryEl: Document | HTMLElement = document) {
+function fetchSubmitButtons(validator: ElementValidatorCallback, queryEl: Document | HTMLElement = document) {
     const megaQuery = SUBMIT_BUTTON_QUERIES.join(", ");
-    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery));
+    let inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)) as Array<HTMLElement>;
+    inputs = inputs.filter(input => validator(LoginTargetFeature.Submit, input));
     return sortFormElements(inputs, "submit");
 }
 
-function fetchUsernameInputs(queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
+function fetchUsernameInputs(validator: ElementValidatorCallback, queryEl: Document | HTMLElement = document): Array<HTMLInputElement> {
     const megaQuery = USERNAME_QUERIES.join(", ");
-    const inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    let inputs = Array.prototype.slice.call(queryEl.querySelectorAll(megaQuery)).filter((el: Element) => isInput(el)) as Array<HTMLInputElement>;
+    inputs = inputs.filter(input => validator(LoginTargetFeature.Username, input));
     return sortFormElements(inputs, "username");
 }
 

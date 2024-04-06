@@ -1,22 +1,23 @@
 export type InputEventTrigger = "keypress" | "fill";
 
 export class LocustInputEvent extends InputEvent {
-    private _data: string;
     private _source: InputEventTrigger;
 
     constructor(
         source: InputEventTrigger,
         type: string,
-        data: string,
-        eventInitDict?: EventInit
+        eventInitDict?: InputEventInit
     ) {
         super(type, eventInitDict);
         this._source = source;
-        this._data = data;
     }
 
-    get data(): string {
-        return this._data;
+    /**
+     * React 15 compat
+     * @see https://chuckconway.com/changing-a-react-input-value-from-vanilla-javascript/
+     */
+    get simulated(): boolean {
+        return true;
     }
 
     get source(): InputEventTrigger {
